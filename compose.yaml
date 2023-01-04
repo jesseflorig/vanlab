@@ -1,0 +1,37 @@
+services:
+  node-red:
+    image: nodered/node-red:latest
+    container_name: node-red
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/London
+    networks:
+      # Should match avaiable network defined below
+      - node-red-net
+    ports:
+      - 1880:1880
+    volumes:
+      # Should match volume defined below
+      - node-red-data:/data
+
+  # Default mosquitto port is 1883
+  MQTTbroker:
+    image: eclipse-mosquitto:2
+    container_name: mosquitto
+    restart: unless-stopped
+    networks:
+      # Should match avaiable network defined below
+      # Should be on the same network as node-red
+      - node-red-net
+    volumes:
+      - ./mosquitto-config:/mosquitto/config/
+      - mosquitto-log:/mosquitto/log/
+      - mosquitto-data:/mosquitto/data
+
+volumes:
+  node-red-data:
+  mosquitto-log:
+  mosquitto-data:
+
+networks:
+  node-red-net:
