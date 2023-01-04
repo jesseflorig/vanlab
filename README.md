@@ -18,7 +18,7 @@ Data visualisation UI for the IoT telemetry
 ## Getting Started
 Clone the project, navigate into the directory and run `make start`.
 ```
-git clone
+git clone git@github.com:jesseflorig/vanlab.git
 
 cd vanlab
 
