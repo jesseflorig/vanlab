@@ -5,8 +5,10 @@ start:
 # syntax: make addUser u=test p=password
 addUser:
 	docker exec mosquitto mosquitto_passwd -b /mosquitto/config/password.txt $u $p
+	docker restart mosquitto
 
 # mosquitto container has to be running to delete a user
 # syntax: make deleteUser u=test
 deleteUser:
 	docker exec mosquitto mosquitto_passwd -D /mosquitto/config/password.txt $u
+	docker restart mosquitto
