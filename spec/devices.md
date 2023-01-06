@@ -18,4 +18,5 @@ MQTT topic specification for a variety of sensors
   - `brightness` <\NUMBER\> percentage of brightness (0-100)
   - `on` <\BOOLEAN\> whether or not the light is on
 
-  <sup>1</sup>: computed values by NODE-RED for analysis
+#### Notes
+1. Computed values by NODE-RED for analysis
