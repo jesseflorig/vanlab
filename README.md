@@ -3,10 +3,10 @@ A containerized edge IoT environment built for Fleet 1.
 
 ## Components
 
-- [x] __Node-RED__ - A WSYWIG logic flow application for setting up automations
-- [x] __Mosquitto__ - An MQTT broker for lightweight IoT messaging
-- [ ] __InfluxDB__ - Time-series datastore with automatic rollup
-- [ ] __Grafana__ - Monitoring and data analytics visualisations for the IoT telemetry
+- [x] __Node-RED__ _WSYWIG logic flow application for setting up automations_
+- [x] __Mosquitto__ _MQTT broker for lightweight IoT messaging_
+- [ ] __InfluxDB__ _Time-series datastore with automatic rollup_
+- [ ] __Grafana__ _Monitoring and data analytics visualisations for the IoT telemetry_
 
 ## Getting Started
 Clone the project, navigate into the directory and run `make start`:
