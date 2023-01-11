@@ -2,7 +2,7 @@
 MQTT topic specification for a variety of sensors
 
 ## Sensor Table of Contents
-1. [Access](## Access)
+1. [Access](#access)
   1. Door
   1. Lock
   1. Motion
