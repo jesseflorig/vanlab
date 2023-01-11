@@ -3,20 +3,20 @@ MQTT topic specification for a variety of sensors
 
 ## Sensor Table of Contents
 1. [Access](#access)
-  1. Door
-  1. Lock
-  1. Motion
+  - Door
+  - Lock
+  - Motion
 1. HVAC
-  1. Fan
-  1. Thermostat
-  1. Vent
-  1. Water Heater
+  - Fan
+  - Thermostat
+  - Vent
+  - Water Heater
 1. Lighting
-  1. Light
-  1. RGB Light
+  - Light
+  - RGB Light
 1. Utility
-  1. Tank
-  1. Valve
+  - Tank
+  - Valve
 
 ## Access
 Allowing or detecting access
