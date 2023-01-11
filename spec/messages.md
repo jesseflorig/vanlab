@@ -1,4 +1,4 @@
-# MQTT Messages spec
+# [WIP] MQTT Messages spec
 MQTT Messages specification
 
 ### Format
