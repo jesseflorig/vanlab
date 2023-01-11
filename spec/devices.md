@@ -7,16 +7,16 @@ MQTT topic specification for a variety of sensors
     1. Lock
     1. Motion
 1. HVAC
-  1. Fan
-  1. Thermostat
-  1. Vent
-  1. Water Heater
+    1. Fan
+    1. Thermostat
+    1. Vent
+    1. Water Heater
 1. Lighting
-  1. Light
-  1. RGB Light
+    1. Light
+    1. RGB Light
 1. Utility
-  1. Tank
-  1. Valve
+    1. Tank
+    1. Valve
 
 ## Access
 Allowing or detecting access
