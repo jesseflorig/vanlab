@@ -7,34 +7,71 @@ services:
       - TZ=Europe/London
     networks:
       # Should match avaiable network defined below
-      - node-red-net
+      - vanlab-net
     ports:
       - 1880:1880
     volumes:
       # Should match volume defined below
       - node-red-data:/data
 
-  # Default mosquitto port is 1883
-  MQTTbroker:
+  mosquitto:
     image: eclipse-mosquitto:2
     container_name: mosquitto
     restart: unless-stopped
     networks:
       # Should match avaiable network defined below
       # Should be on the same network as node-red
-      - node-red-net
+      - vanlab-net
     volumes:
-      - ./mosquitto-config:/mosquitto/config/
+      - ./mosquitto:/mosquitto
       - mosquitto-log:/mosquitto/log/
       - mosquitto-data:/mosquitto/data
     ports:
       - 1883:1883
       - 9001:9001
 
+  influxdb:
+    image: influxdb:latest
+    container_name: influxdb
+    networks:
+      - vanlab-net
+
+    ports:
+      - 8086:8086
+    volumes:
+      - influxdb-data:/var/lib/influxdb
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_USER}
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_PASSWORD}
+      - DOCKER_INFLUXDB_INIT_ORG=${INFLUXDB_ORG}
+      - DOCKER_INFLUXDB_INIT_BUCKET=nodered
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    networks:
+      - vanlab-net
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana-data:/var/lib/graphana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    depends_on:
+      - influxdb
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USER}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+      - INFLUXDB_URL=http://influxdb:8086
+      - INFLUXDB_USERNAME=${INFLUXDB_USER}
+      - INFLUXDB_PASSWORD=${INFLUXDB_PASSWORD}
+
 volumes:
   node-red-data:
   mosquitto-log:
   mosquitto-data:
+  influxdb-data:
+  grafana-data:
 
 networks:
-  node-red-net:
+  vanlab-net:
