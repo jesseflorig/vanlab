@@ -35,7 +35,7 @@ Heating, venting, and air conditioning
 - __thermostat/__
   - __targetTemp__ `NUMBER` target temperature degrees in fahrenheit
   - __humidity__ `NUMBER` percentage of water per unit of air
-  - __dewpoint__^1 `NUMBER` degree at which dew forms (based on __humidity__ & __temperature__)
+  - __dewpoint__<sup>1</sup> `NUMBER` degree at which dew forms (based on __humidity__ & __temperature__)
   - __isCooling__ `BOOLEAN` whether the unit is actively cooling
   - __isHeating__ `BOOLEAN` whether the unit is actively heating
   - __isFanOn__ `BOOLEAN` whther the unit fan is on
@@ -75,4 +75,4 @@ Miscellaneous sensors
 [Back to top](#table-of-contents)
 
 #### Notes
-^1: Computed values by NODE-RED for analysis
+- <sup>1</sup>: Computed values by NODE-RED for analysis
