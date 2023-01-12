@@ -1,7 +1,7 @@
 # [WIP] Fleet 1 MQTT sensor spec
 MQTT topic specification for a variety of sensors
 
-## Sensor Table of Contents
+## Table of Contents
 1. [Access](#access)
     1. [Door](#door)
     1. Lock
@@ -26,6 +26,8 @@ Allowing or detecting access
 - __door/__
   - __open__ `BOOLEAN` whether the door is open
 
+[Back to top](#table-of-contents)
+
 ## HVAC
 Heating, venting, and air conditioning
 
@@ -33,10 +35,12 @@ Heating, venting, and air conditioning
 - __thermostat/__
   - __targetTemp__ `NUMBER` target temperature degrees in fahrenheit
   - __humidity__ `NUMBER` percentage of water per unit of air
-  - __dewpoint__<sup>1</sup> `NUMBER` degree at which dew forms (based on __humidity__ & __temperature__)
+  - __dewpoint__^1 `NUMBER` degree at which dew forms (based on __humidity__ & __temperature__)
   - __isCooling__ `BOOLEAN` whether the unit is actively cooling
   - __isHeating__ `BOOLEAN` whether the unit is actively heating
   - __isFanOn__ `BOOLEAN` whther the unit fan is on
+
+[Back to top](#table-of-contents)
 
 ## Lighting
 Let there be light
@@ -55,6 +59,8 @@ Let there be light
   - __color__ `NUMBER[]` red, green, blue intensity values (0-255)
   - __brightness__ `NUMBER` percentage of brightness (0-100)
 
+[Back to top](#table-of-contents)
+
 ## Utility
 Miscellaneous sensors
 
@@ -66,5 +72,7 @@ Miscellaneous sensors
 - __valve/__
   - __open__ `BOOLEAN` whether the valve is open
 
+[Back to top](#table-of-contents)
+
 #### Notes
-1. Computed values by NODE-RED for analysis
+^1: Computed values by NODE-RED for analysis
