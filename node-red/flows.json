@@ -1,0 +1,679 @@
+[
+    {
+        "id": "f6f2187d.f17ca8",
+        "type": "tab",
+        "label": "Automation",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "1ca4044b19595ee6",
+        "type": "tab",
+        "label": "REST API",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "7077e724f4a04ab3",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "mosquitto",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "8356e031071f254d",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": "8086",
+        "protocol": "http",
+        "database": "nodered",
+        "name": "InfluxDB",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "2.0",
+        "url": "http://influxdb:8086",
+        "rejectUnauthorized": false
+    },
+    {
+        "id": "4d86382479f4f54f",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "Subscribe All",
+        "topic": "#",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "7077e724f4a04ab3",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 130,
+        "y": 60,
+        "wires": [
+            [
+                "b25d92c29fa2de25"
+            ]
+        ]
+    },
+    {
+        "id": "b25d92c29fa2de25",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "Global Debug",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 340,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "ec7c4c7087cc9d51",
+        "type": "inject",
+        "z": "f6f2187d.f17ca8",
+        "name": "Open Door",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "door/",
+        "payload": "{ \"open\":1, \"manual\":1 }",
+        "payloadType": "json",
+        "x": 120,
+        "y": 120,
+        "wires": [
+            [
+                "dfe1195e17a6e326"
+            ]
+        ]
+    },
+    {
+        "id": "761ff2a023e4302a",
+        "type": "mqtt out",
+        "z": "f6f2187d.f17ca8",
+        "name": "Publish All",
+        "topic": "",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "7077e724f4a04ab3",
+        "x": 750,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "78000f2cdf030498",
+        "type": "inject",
+        "z": "f6f2187d.f17ca8",
+        "name": "Close Door",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "door/",
+        "payload": "{ \"open\":0, \"manual\":1 }",
+        "payloadType": "json",
+        "x": 120,
+        "y": 160,
+        "wires": [
+            [
+                "dfe1195e17a6e326"
+            ]
+        ]
+    },
+    {
+        "id": "bf920d8581e15d8e",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "door/",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "7077e724f4a04ab3",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 110,
+        "y": 320,
+        "wires": [
+            [
+                "d3e33fe887592e3f",
+                "bd52ee51dfa569bd",
+                "65871b0e510e2afb"
+            ]
+        ]
+    },
+    {
+        "id": "d3e33fe887592e3f",
+        "type": "switch",
+        "z": "f6f2187d.f17ca8",
+        "name": "Check Door State",
+        "property": "payload.open",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 350,
+        "y": 320,
+        "wires": [
+            [
+                "132a56bf942bbc6e"
+            ],
+            [
+                "becbf9cd58d372f0"
+            ]
+        ]
+    },
+    {
+        "id": "132a56bf942bbc6e",
+        "type": "change",
+        "z": "f6f2187d.f17ca8",
+        "name": "Light On",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"on\":1,\"manual\":0,\"reason\":\"door opened\"}",
+                "tot": "json"
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "light/",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 560,
+        "y": 320,
+        "wires": [
+            [
+                "761ff2a023e4302a"
+            ]
+        ]
+    },
+    {
+        "id": "becbf9cd58d372f0",
+        "type": "change",
+        "z": "f6f2187d.f17ca8",
+        "name": "Light Off",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"on\":0,\"manual\":0,\"reason\":\"door closed\"}",
+                "tot": "json"
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "light/",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 560,
+        "y": 360,
+        "wires": [
+            [
+                "761ff2a023e4302a"
+            ]
+        ]
+    },
+    {
+        "id": "62cc1f62c6e0f277",
+        "type": "inject",
+        "z": "f6f2187d.f17ca8",
+        "name": "Light On",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "light/",
+        "payload": "{ \"on\":1, \"manual\":1 }",
+        "payloadType": "json",
+        "x": 120,
+        "y": 220,
+        "wires": [
+            [
+                "761ff2a023e4302a"
+            ]
+        ]
+    },
+    {
+        "id": "e27b900cad9449a9",
+        "type": "inject",
+        "z": "f6f2187d.f17ca8",
+        "name": "Light Off",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "light/",
+        "payload": "{ \"on\":0, \"manual\":1 }",
+        "payloadType": "json",
+        "x": 120,
+        "y": 260,
+        "wires": [
+            [
+                "761ff2a023e4302a"
+            ]
+        ]
+    },
+    {
+        "id": "d178f1600d5e0bfd",
+        "type": "influxdb out",
+        "z": "f6f2187d.f17ca8",
+        "influxdb": "8356e031071f254d",
+        "name": "Vanlab MQTT",
+        "measurement": "MQTT",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "nodered",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "vanlab",
+        "bucket": "nodered",
+        "x": 760,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "bd52ee51dfa569bd",
+        "type": "change",
+        "z": "f6f2187d.f17ca8",
+        "name": "Door MQTT -> Influx",
+        "rules": [
+            {
+                "t": "set",
+                "p": "door",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg",
+                "dc": true
+            },
+            {
+                "t": "set",
+                "p": "tags.topic",
+                "pt": "msg",
+                "to": "topic",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "tags.device",
+                "pt": "msg",
+                "to": "door",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$append(fields,tags)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 360,
+        "y": 400,
+        "wires": [
+            [
+                "d178f1600d5e0bfd"
+            ]
+        ]
+    },
+    {
+        "id": "ec9159b9a61ba6cc",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "light/",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "7077e724f4a04ab3",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 110,
+        "y": 460,
+        "wires": [
+            [
+                "95e26b18c68349db"
+            ]
+        ]
+    },
+    {
+        "id": "95e26b18c68349db",
+        "type": "change",
+        "z": "f6f2187d.f17ca8",
+        "name": "Light MQTT -> Influx",
+        "rules": [
+            {
+                "t": "set",
+                "p": "light.on",
+                "pt": "global",
+                "to": "payload.on",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "fields.on",
+                "pt": "msg",
+                "to": "payload.on",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "tags.device",
+                "pt": "msg",
+                "to": "light",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "tags.topic",
+                "pt": "msg",
+                "to": "topic",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "fields.manual",
+                "pt": "msg",
+                "to": "payload.manual",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "fields.reason",
+                "pt": "msg",
+                "to": "payload.reason",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$append(fields,tags)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 360,
+        "y": 460,
+        "wires": [
+            [
+                "d178f1600d5e0bfd"
+            ]
+        ]
+    },
+    {
+        "id": "65871b0e510e2afb",
+        "type": "change",
+        "z": "f6f2187d.f17ca8",
+        "name": "Save Lock State",
+        "rules": [
+            {
+                "t": "set",
+                "p": "door.locked",
+                "pt": "global",
+                "to": "payload.locked",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 340,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "dfe1195e17a6e326",
+        "type": "change",
+        "z": "f6f2187d.f17ca8",
+        "name": "Retrieve Locked State",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload.locked",
+                "pt": "msg",
+                "to": "door.locked",
+                "tot": "global"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 360,
+        "y": 120,
+        "wires": [
+            [
+                "761ff2a023e4302a"
+            ]
+        ]
+    },
+    {
+        "id": "c8107088.37ef9",
+        "type": "http in",
+        "z": "1ca4044b19595ee6",
+        "name": "",
+        "url": "/hello-json",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 120,
+        "y": 40,
+        "wires": [
+            [
+                "4e8237da.b17dc8"
+            ]
+        ]
+    },
+    {
+        "id": "4e8237da.b17dc8",
+        "type": "template",
+        "z": "1ca4044b19595ee6",
+        "name": "JSON Content",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{ \"Hello\": \"World\" }",
+        "x": 320,
+        "y": 40,
+        "wires": [
+            [
+                "65401623.9abfe8"
+            ]
+        ]
+    },
+    {
+        "id": "65401623.9abfe8",
+        "type": "change",
+        "z": "1ca4044b19595ee6",
+        "name": "Set Headers",
+        "rules": [
+            {
+                "t": "set",
+                "p": "headers",
+                "pt": "msg",
+                "to": "{}",
+                "tot": "json"
+            },
+            {
+                "t": "set",
+                "p": "headers.content-type",
+                "pt": "msg",
+                "to": "application/json",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 510,
+        "y": 40,
+        "wires": [
+            [
+                "f7d3e35a.082c2"
+            ]
+        ]
+    },
+    {
+        "id": "f7d3e35a.082c2",
+        "type": "http response",
+        "z": "1ca4044b19595ee6",
+        "name": "Response",
+        "statusCode": "",
+        "headers": {},
+        "x": 680,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "116e3a7722be03df",
+        "type": "http in",
+        "z": "1ca4044b19595ee6",
+        "name": "",
+        "url": "/init",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 100,
+        "y": 100,
+        "wires": [
+            [
+                "5f605923b4160caa"
+            ]
+        ]
+    },
+    {
+        "id": "5f605923b4160caa",
+        "type": "function",
+        "z": "1ca4044b19595ee6",
+        "name": "Global Payload",
+        "func": "msg.payload = {}\n\nconst keys = global.keys()\nkeys.map(key => {\n    msg.payload[key] = global.get(key)\n})\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 100,
+        "wires": [
+            [
+                "65401623.9abfe8"
+            ]
+        ]
+    }
+]
