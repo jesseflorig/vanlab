@@ -5,38 +5,28 @@ services:
     restart: unless-stopped
     environment:
       - TZ=Europe/London
-    networks:
-      # Should match avaiable network defined below
-      - vanlab-net
-    links:
-      - influxdb
     ports:
       - 1880:1880
     volumes:
-      # Should match volume defined below
       - node-red-data:/data
+    links:
+      - influxdb
 
   mosquitto:
     image: eclipse-mosquitto:2
     container_name: mosquitto
     restart: unless-stopped
-    networks:
-      # Should match avaiable network defined below
-      # Should be on the same network as node-red
-      - vanlab-net
+    ports:
+      - 1883:1883
+      - 9001:9001
     volumes:
       - ./mosquitto:/mosquitto
       - mosquitto-log:/mosquitto/log/
       - mosquitto-data:/mosquitto/data
-    ports:
-      - 1883:1883
-      - 9001:9001
 
   influxdb:
     image: influxdb:latest
     container_name: influxdb
-    networks:
-      - vanlab-net
     ports:
       - 8086:8086
     volumes:
@@ -51,15 +41,13 @@ services:
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
-    networks:
-      - vanlab-net
     links:
       - influxdb
     ports:
       - 3000:3000
     volumes:
-      - grafana-data:/var/lib/graphana
       - ./grafana/provisioning:/etc/grafana/provisioning
+      - grafana-data:/var/lib/graphana
     depends_on:
       - influxdb
     environment:
@@ -75,6 +63,3 @@ volumes:
   mosquitto-data:
   influxdb-data:
   grafana-data:
-
-networks:
-  vanlab-net:
