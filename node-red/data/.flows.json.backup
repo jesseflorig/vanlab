@@ -124,7 +124,7 @@
         "type": "mqtt in",
         "z": "c75c795fb5b7933d",
         "name": "",
-        "topic": "door/",
+        "topic": "fleet1/door/",
         "qos": "2",
         "datatype": "auto-detect",
         "broker": "7077e724f4a04ab3",
@@ -132,7 +132,7 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 110,
+        "x": 130,
         "y": 140,
         "wires": [
             [
@@ -192,7 +192,7 @@
                 "t": "set",
                 "p": "topic",
                 "pt": "msg",
-                "to": "light/",
+                "to": "fleet1/light/",
                 "tot": "str"
             }
         ],
@@ -226,7 +226,7 @@
                 "t": "set",
                 "p": "topic",
                 "pt": "msg",
-                "to": "light/",
+                "to": "fleet1/light/",
                 "tot": "str"
             }
         ],
@@ -315,7 +315,7 @@
         "type": "mqtt in",
         "z": "c75c795fb5b7933d",
         "name": "",
-        "topic": "light/",
+        "topic": "fleet1/light/",
         "qos": "2",
         "datatype": "auto-detect",
         "broker": "7077e724f4a04ab3",
@@ -323,7 +323,7 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 110,
+        "x": 120,
         "y": 280,
         "wires": [
             [
@@ -430,7 +430,7 @@
         "type": "mqtt in",
         "z": "c75c795fb5b7933d",
         "name": "",
-        "topic": "pico/button",
+        "topic": "fleet1/pico/button",
         "qos": "2",
         "datatype": "auto-detect",
         "broker": "7077e724f4a04ab3",
@@ -438,7 +438,7 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 130,
+        "x": 150,
         "y": 360,
         "wires": [
             [
@@ -896,7 +896,7 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "light/",
+        "topic": "fleet1/light/",
         "payload": "{ \"on\":1, \"manual\":1 }",
         "payloadType": "json",
         "x": 120,
@@ -925,7 +925,7 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "light/",
+        "topic": "fleet1/light/",
         "payload": "{ \"on\":0, \"manual\":1 }",
         "payloadType": "json",
         "x": 120,
@@ -1012,7 +1012,7 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "door/",
+        "topic": "fleet1/door/",
         "payload": "{ \"open\":1, \"manual\":1 }",
         "payloadType": "json",
         "x": 120,
@@ -1041,7 +1041,7 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "door/",
+        "topic": "fleet1/door/",
         "payload": "{ \"open\":0, \"manual\":1 }",
         "payloadType": "json",
         "x": 120,
