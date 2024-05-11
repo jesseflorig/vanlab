@@ -7,7 +7,7 @@ A containerized edge IoT environment built for Fleet 1.
 - [x] __Mosquitto__ _MQTT broker for lightweight IoT messaging_
 - [x] __InfluxDB__ _Time-series datastore with automatic rollup_
 - [x] __Grafana__ _Monitoring and data analytics visualisations for the IoT telemetry_
-- [ ] __Vanlab UI__ _IoT front-end for Vanlab_
+- [ ] __Vanlab UI__ _IoT front-end for Vanlab_ (Currently a separate repo as [FVS UI](https://github.com/jesseflorig/fvs-ui))
 
 ## Getting Started
 Clone the project, navigate into the directory, create the `.env`, and run `make start`:
