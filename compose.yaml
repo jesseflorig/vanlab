@@ -1,7 +1,7 @@
-version: '2'
+version: '3.8'
 services:
   node-red:
-    image: nodered/node-red:latest
+    image: nodered/node-red
     container_name: node-red
     restart: unless-stopped
     environment:
@@ -9,53 +9,47 @@ services:
     ports:
       - '1880:1880'
     volumes:
-      - node-red-data:/data
+      - './node-red/data:/data'
     links:
       - influxdb
 
   mosquitto:
-    image: eclipse-mosquitto:2
+    image: eclipse-mosquitto
     container_name: mosquitto
     restart: unless-stopped
     ports:
       - '1883:1883'
       - '9001:9001'
     volumes:
-      - ./mosquitto:/mosquitto
-      - mosquitto-log:/mosquitto/log/
-      - mosquitto-data:/mosquitto/data
+      - './mosquitto/config:/mosquitto/config'
+      - './mosquitto/data:/mosquitto/data'
+      - './mosquitto/log:/mosquitto/log'
 
   influxdb:
-    image: influxdb:latest
+    image: influxdb
     container_name: influxdb
-    restart: always
+    restart: unless-stopped
     ports:
       - '8086:8086'
     volumes:
-      - influxdb-data:/var/lib/influxdb
+      - './influxdb/data:/var/lib/influxdb'
     environment:
       - INFLUXDB_DB=vanlab
       - INFLUXDB_ADMIN_USER=${INFLUXDB_USER}
       - INFLUXDB_ADMIN_PASSWORD=${INFLUXDB_PASSWORD}
 
   grafana:
-    image: grafana/grafana:latest
+    image: grafana/grafana
     container_name: grafana
-    restart: always
+    restart: unless-stopped
     depends_on:
       - influxdb
     ports:
       - '3000:3000'
     volumes:
-      - ./grafana/provisioning:/etc/grafana/provisioning
-      - grafana-data:/var/lib/grafana
+      - './grafana/provisioning:/etc/grafana/provisioning'
+      - './grafana/data:/var/lib/grafana'
+      - './grafana/log:/var/log/grafana'
     environment:
       - GF_SECURITY_ADMIN_USER=${GRAFANA_USER}
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
-
-volumes:
-  node-red-data:
-  mosquitto-log:
-  mosquitto-data:
-  influxdb-data:
-  grafana-data:

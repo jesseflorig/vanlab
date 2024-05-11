@@ -1,0 +1,1082 @@
+[
+    {
+        "id": "c75c795fb5b7933d",
+        "type": "tab",
+        "label": "Automation",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "b5a1e0a0d2cea72d",
+        "type": "tab",
+        "label": "REST API",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "eb68ce8f2177d05e",
+        "type": "tab",
+        "label": "Test Harness",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "7077e724f4a04ab3",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "mosquitto",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "8356e031071f254d",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": "8086",
+        "protocol": "http",
+        "database": "nodered",
+        "name": "InfluxDB",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "2.0",
+        "url": "http://influxdb:8086",
+        "rejectUnauthorized": false
+    },
+    {
+        "id": "d215042f009317a6",
+        "type": "mqtt in",
+        "z": "c75c795fb5b7933d",
+        "name": "Subscribe All",
+        "topic": "#",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "7077e724f4a04ab3",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 130,
+        "y": 60,
+        "wires": [
+            [
+                "435642da4f54b4d1"
+            ]
+        ]
+    },
+    {
+        "id": "435642da4f54b4d1",
+        "type": "debug",
+        "z": "c75c795fb5b7933d",
+        "name": "Global Debug",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 340,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "c52bd6eedfdf184f",
+        "type": "mqtt out",
+        "z": "c75c795fb5b7933d",
+        "name": "Publish All",
+        "topic": "",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "7077e724f4a04ab3",
+        "x": 1050,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "7281080bc5ddb925",
+        "type": "mqtt in",
+        "z": "c75c795fb5b7933d",
+        "name": "",
+        "topic": "door/",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "7077e724f4a04ab3",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 110,
+        "y": 140,
+        "wires": [
+            [
+                "a041e28a9f333971",
+                "072a345f0b0043e1",
+                "b8462a0cefc5b718"
+            ]
+        ]
+    },
+    {
+        "id": "a041e28a9f333971",
+        "type": "switch",
+        "z": "c75c795fb5b7933d",
+        "name": "Check Door State",
+        "property": "payload.open",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 350,
+        "y": 140,
+        "wires": [
+            [
+                "edfcf4bd8d04915d"
+            ],
+            [
+                "489921d93fc94c79"
+            ]
+        ]
+    },
+    {
+        "id": "edfcf4bd8d04915d",
+        "type": "change",
+        "z": "c75c795fb5b7933d",
+        "name": "Light On",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"on\":1,\"manual\":0,\"reason\":\"door opened\"}",
+                "tot": "json"
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "light/",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 560,
+        "y": 140,
+        "wires": [
+            [
+                "c52bd6eedfdf184f"
+            ]
+        ]
+    },
+    {
+        "id": "489921d93fc94c79",
+        "type": "change",
+        "z": "c75c795fb5b7933d",
+        "name": "Light Off",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"on\":0,\"manual\":0,\"reason\":\"door closed\"}",
+                "tot": "json"
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "light/",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 560,
+        "y": 180,
+        "wires": [
+            [
+                "c52bd6eedfdf184f"
+            ]
+        ]
+    },
+    {
+        "id": "ce79deb770ae231c",
+        "type": "influxdb out",
+        "z": "c75c795fb5b7933d",
+        "influxdb": "8356e031071f254d",
+        "name": "Vanlab MQTT",
+        "measurement": "MQTT",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "nodered",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "vanlab",
+        "bucket": "nodered",
+        "x": 760,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "072a345f0b0043e1",
+        "type": "change",
+        "z": "c75c795fb5b7933d",
+        "name": "Door MQTT -> Influx",
+        "rules": [
+            {
+                "t": "set",
+                "p": "door",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg",
+                "dc": true
+            },
+            {
+                "t": "set",
+                "p": "tags.topic",
+                "pt": "msg",
+                "to": "topic",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "tags.device",
+                "pt": "msg",
+                "to": "door",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$append(fields,tags)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 360,
+        "y": 220,
+        "wires": [
+            [
+                "ce79deb770ae231c"
+            ]
+        ]
+    },
+    {
+        "id": "4f08706df329331e",
+        "type": "mqtt in",
+        "z": "c75c795fb5b7933d",
+        "name": "",
+        "topic": "light/",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "7077e724f4a04ab3",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 110,
+        "y": 280,
+        "wires": [
+            [
+                "3651cf4e2be96e73"
+            ]
+        ]
+    },
+    {
+        "id": "3651cf4e2be96e73",
+        "type": "change",
+        "z": "c75c795fb5b7933d",
+        "name": "Light MQTT -> Influx",
+        "rules": [
+            {
+                "t": "set",
+                "p": "light.on",
+                "pt": "global",
+                "to": "payload.on",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "fields.on",
+                "pt": "msg",
+                "to": "payload.on",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "tags.device",
+                "pt": "msg",
+                "to": "light",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "tags.topic",
+                "pt": "msg",
+                "to": "topic",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "fields.manual",
+                "pt": "msg",
+                "to": "payload.manual",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "fields.reason",
+                "pt": "msg",
+                "to": "payload.reason",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$append(fields,tags)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 360,
+        "y": 280,
+        "wires": [
+            [
+                "ce79deb770ae231c"
+            ]
+        ]
+    },
+    {
+        "id": "b8462a0cefc5b718",
+        "type": "change",
+        "z": "c75c795fb5b7933d",
+        "name": "Save Lock State",
+        "rules": [
+            {
+                "t": "set",
+                "p": "door.locked",
+                "pt": "global",
+                "to": "payload.locked",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 340,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c544844f3ff89db3",
+        "type": "mqtt in",
+        "z": "c75c795fb5b7933d",
+        "name": "",
+        "topic": "pico/button",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "7077e724f4a04ab3",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 130,
+        "y": 360,
+        "wires": [
+            [
+                "c3525735c0493dfd"
+            ]
+        ]
+    },
+    {
+        "id": "c3525735c0493dfd",
+        "type": "switch",
+        "z": "c75c795fb5b7933d",
+        "name": "Check Press State",
+        "property": "payload.press",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 350,
+        "y": 360,
+        "wires": [
+            [
+                "68a5ed661324cb69"
+            ]
+        ]
+    },
+    {
+        "id": "89d00cea92fa7ff9",
+        "type": "change",
+        "z": "c75c795fb5b7933d",
+        "name": "Global Pico Light2 On Value",
+        "rules": [
+            {
+                "t": "set",
+                "p": "pico.light2.on",
+                "pt": "global",
+                "to": "on",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1000,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "68a5ed661324cb69",
+        "type": "switch",
+        "z": "c75c795fb5b7933d",
+        "name": "Global Pico Light2",
+        "property": "pico.light2.on",
+        "propertyType": "global",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "num"
+            },
+            {
+                "t": "gt",
+                "v": "0",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 550,
+        "y": 360,
+        "wires": [
+            [
+                "301a0c795564efba"
+            ],
+            [
+                "a058d442148e0b68"
+            ]
+        ]
+    },
+    {
+        "id": "301a0c795564efba",
+        "type": "change",
+        "z": "c75c795fb5b7933d",
+        "name": "Light2 On",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"on\":1,\"manual\":1,\"reason\":\"pico button pressed\"}",
+                "tot": "json"
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "pico/light2/",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 740,
+        "y": 360,
+        "wires": [
+            [
+                "c52bd6eedfdf184f",
+                "89d00cea92fa7ff9"
+            ]
+        ]
+    },
+    {
+        "id": "a058d442148e0b68",
+        "type": "change",
+        "z": "c75c795fb5b7933d",
+        "name": "Light2 Off",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"on\":0,\"manual\":1,\"reason\":\"pico button pressed\"}",
+                "tot": "json"
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "pico/light2/",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 740,
+        "y": 400,
+        "wires": [
+            [
+                "c52bd6eedfdf184f",
+                "89d00cea92fa7ff9"
+            ]
+        ]
+    },
+    {
+        "id": "5b51b72a4a12a204",
+        "type": "http in",
+        "z": "b5a1e0a0d2cea72d",
+        "name": "",
+        "url": "/hello-json",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 120,
+        "y": 40,
+        "wires": [
+            [
+                "5cf1b061fd412d30"
+            ]
+        ]
+    },
+    {
+        "id": "5cf1b061fd412d30",
+        "type": "template",
+        "z": "b5a1e0a0d2cea72d",
+        "name": "JSON Content",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{ \"Hello\": \"World\" }",
+        "x": 320,
+        "y": 40,
+        "wires": [
+            [
+                "64b9db1c7bbd9f57"
+            ]
+        ]
+    },
+    {
+        "id": "64b9db1c7bbd9f57",
+        "type": "change",
+        "z": "b5a1e0a0d2cea72d",
+        "name": "Set Headers",
+        "rules": [
+            {
+                "t": "set",
+                "p": "headers",
+                "pt": "msg",
+                "to": "{}",
+                "tot": "json"
+            },
+            {
+                "t": "set",
+                "p": "headers.content-type",
+                "pt": "msg",
+                "to": "application/json",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 510,
+        "y": 40,
+        "wires": [
+            [
+                "28fa17db6c912a7c"
+            ]
+        ]
+    },
+    {
+        "id": "28fa17db6c912a7c",
+        "type": "http response",
+        "z": "b5a1e0a0d2cea72d",
+        "name": "Response",
+        "statusCode": "",
+        "headers": {},
+        "x": 680,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "237f7e094e91db26",
+        "type": "http in",
+        "z": "b5a1e0a0d2cea72d",
+        "name": "",
+        "url": "/init",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 100,
+        "y": 100,
+        "wires": [
+            [
+                "302ae7f3e52bbd0f"
+            ]
+        ]
+    },
+    {
+        "id": "302ae7f3e52bbd0f",
+        "type": "function",
+        "z": "b5a1e0a0d2cea72d",
+        "name": "Global Payload",
+        "func": "msg.payload = {}\n\nconst keys = global.keys()\nkeys.map(key => {\n    msg.payload[key] = global.get(key)\n})\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 100,
+        "wires": [
+            [
+                "64b9db1c7bbd9f57"
+            ]
+        ]
+    },
+    {
+        "id": "a95eeb54f4f1b3a4",
+        "type": "mqtt out",
+        "z": "eb68ce8f2177d05e",
+        "name": "Publish All",
+        "topic": "",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "7077e724f4a04ab3",
+        "x": 850,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "1d582b7d8ec173fb",
+        "type": "inject",
+        "z": "eb68ce8f2177d05e",
+        "name": "LED On",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "pico/light2/",
+        "payload": "{ \"on\":1}",
+        "payloadType": "json",
+        "x": 110,
+        "y": 400,
+        "wires": [
+            [
+                "1de8161e1670597e",
+                "a95eeb54f4f1b3a4"
+            ]
+        ]
+    },
+    {
+        "id": "be21eb9be497533e",
+        "type": "inject",
+        "z": "eb68ce8f2177d05e",
+        "name": "LED Off",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "pico/light2/",
+        "payload": "{ \"on\":0}",
+        "payloadType": "json",
+        "x": 110,
+        "y": 440,
+        "wires": [
+            [
+                "1de8161e1670597e",
+                "a95eeb54f4f1b3a4"
+            ]
+        ]
+    },
+    {
+        "id": "8f5628da9b6cca02",
+        "type": "inject",
+        "z": "eb68ce8f2177d05e",
+        "name": "LED On 25%",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "pico/light2/",
+        "payload": "{ \"on\":0.25}",
+        "payloadType": "json",
+        "x": 130,
+        "y": 520,
+        "wires": [
+            [
+                "1de8161e1670597e",
+                "a95eeb54f4f1b3a4"
+            ]
+        ]
+    },
+    {
+        "id": "402bfedc33768a8f",
+        "type": "inject",
+        "z": "eb68ce8f2177d05e",
+        "name": "LED On 10%",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "pico/light2/",
+        "payload": "{ \"on\":0.1}",
+        "payloadType": "json",
+        "x": 130,
+        "y": 480,
+        "wires": [
+            [
+                "1de8161e1670597e",
+                "a95eeb54f4f1b3a4"
+            ]
+        ]
+    },
+    {
+        "id": "1de8161e1670597e",
+        "type": "change",
+        "z": "eb68ce8f2177d05e",
+        "name": "Global Pico Light2 On Value",
+        "rules": [
+            {
+                "t": "set",
+                "p": "pico.light2.on",
+                "pt": "global",
+                "to": "on",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 620,
+        "y": 400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "45adcdd143765f49",
+        "type": "inject",
+        "z": "eb68ce8f2177d05e",
+        "name": "Light On",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "light/",
+        "payload": "{ \"on\":1, \"manual\":1 }",
+        "payloadType": "json",
+        "x": 120,
+        "y": 240,
+        "wires": [
+            [
+                "a95eeb54f4f1b3a4"
+            ]
+        ]
+    },
+    {
+        "id": "22a329bf36898e6d",
+        "type": "inject",
+        "z": "eb68ce8f2177d05e",
+        "name": "Light Off",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "light/",
+        "payload": "{ \"on\":0, \"manual\":1 }",
+        "payloadType": "json",
+        "x": 120,
+        "y": 280,
+        "wires": [
+            [
+                "a95eeb54f4f1b3a4"
+            ]
+        ]
+    },
+    {
+        "id": "1707fa89c8cba3d2",
+        "type": "inject",
+        "z": "eb68ce8f2177d05e",
+        "name": "Pico On",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "pico/light/",
+        "payload": "{ \"on\":1}",
+        "payloadType": "json",
+        "x": 110,
+        "y": 160,
+        "wires": [
+            [
+                "a95eeb54f4f1b3a4"
+            ]
+        ]
+    },
+    {
+        "id": "658bb03d22fcb698",
+        "type": "inject",
+        "z": "eb68ce8f2177d05e",
+        "name": "Pico Off",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "pico/light/",
+        "payload": "{ \"on\":0}",
+        "payloadType": "json",
+        "x": 110,
+        "y": 200,
+        "wires": [
+            [
+                "a95eeb54f4f1b3a4"
+            ]
+        ]
+    },
+    {
+        "id": "fcb2e3c3ab1a4ccc",
+        "type": "inject",
+        "z": "eb68ce8f2177d05e",
+        "name": "Open Door",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "door/",
+        "payload": "{ \"open\":1, \"manual\":1 }",
+        "payloadType": "json",
+        "x": 120,
+        "y": 40,
+        "wires": [
+            [
+                "95df891a0394ca17"
+            ]
+        ]
+    },
+    {
+        "id": "d25160d38482243a",
+        "type": "inject",
+        "z": "eb68ce8f2177d05e",
+        "name": "Close Door",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "door/",
+        "payload": "{ \"open\":0, \"manual\":1 }",
+        "payloadType": "json",
+        "x": 120,
+        "y": 80,
+        "wires": [
+            [
+                "95df891a0394ca17"
+            ]
+        ]
+    },
+    {
+        "id": "95df891a0394ca17",
+        "type": "change",
+        "z": "eb68ce8f2177d05e",
+        "name": "Retrieve Locked State",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload.locked",
+                "pt": "msg",
+                "to": "door.locked",
+                "tot": "global"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 360,
+        "y": 40,
+        "wires": [
+            [
+                "a95eeb54f4f1b3a4"
+            ]
+        ]
+    }
+]

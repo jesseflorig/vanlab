@@ -1,2 +1,9 @@
 .DS_Store
 .env
+
+node-red/data/.npm
+node-red/data/node_modules
+
+# Log Directories
+grafana/log
+mosquitto/log
