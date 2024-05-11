@@ -1,0 +1,5 @@
+user nodered
+topic readwrite fleet1/#
+
+user dashboard
+topic read fleet1/#
