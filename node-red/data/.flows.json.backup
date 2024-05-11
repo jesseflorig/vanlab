@@ -61,6 +61,7 @@
         "tls": "",
         "influxdbVersion": "2.0",
         "url": "http://influxdb:8086",
+        "timeout": "",
         "rejectUnauthorized": false
     },
     {
@@ -249,16 +250,16 @@
         "z": "c75c795fb5b7933d",
         "influxdb": "8356e031071f254d",
         "name": "Vanlab MQTT",
-        "measurement": "MQTT",
+        "measurement": "light",
         "precision": "",
         "retentionPolicy": "",
         "database": "nodered",
         "precisionV18FluxV20": "s",
         "retentionPolicyV18Flux": "",
         "org": "vanlab",
-        "bucket": "nodered",
-        "x": 760,
-        "y": 220,
+        "bucket": "fleet1",
+        "x": 1040,
+        "y": 280,
         "wires": []
     },
     {
@@ -291,6 +292,20 @@
             },
             {
                 "t": "set",
+                "p": "fields.open",
+                "pt": "msg",
+                "to": "open",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "fields.reason",
+                "pt": "msg",
+                "to": "manual",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
                 "p": "payload",
                 "pt": "msg",
                 "to": "$append(fields,tags)",
@@ -306,7 +321,7 @@
         "y": 220,
         "wires": [
             [
-                "ce79deb770ae231c"
+                "03417c1e51df2561"
             ]
         ]
     },
@@ -346,13 +361,6 @@
             },
             {
                 "t": "set",
-                "p": "fields.on",
-                "pt": "msg",
-                "to": "payload.on",
-                "tot": "msg"
-            },
-            {
-                "t": "set",
                 "p": "tags.device",
                 "pt": "msg",
                 "to": "light",
@@ -363,6 +371,13 @@
                 "p": "tags.topic",
                 "pt": "msg",
                 "to": "topic",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "fields.on",
+                "pt": "msg",
+                "to": "payload.on",
                 "tot": "msg"
             },
             {
@@ -598,6 +613,24 @@
                 "89d00cea92fa7ff9"
             ]
         ]
+    },
+    {
+        "id": "03417c1e51df2561",
+        "type": "influxdb out",
+        "z": "c75c795fb5b7933d",
+        "influxdb": "8356e031071f254d",
+        "name": "Vanlab MQTT",
+        "measurement": "door",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "nodered",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "vanlab",
+        "bucket": "fleet1",
+        "x": 1040,
+        "y": 220,
+        "wires": []
     },
     {
         "id": "5b51b72a4a12a204",
