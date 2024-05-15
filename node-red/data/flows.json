@@ -23,6 +23,14 @@
         "env": []
     },
     {
+        "id": "4bcaeb20b443d19a",
+        "type": "tab",
+        "label": "Simulator",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "7077e724f4a04ab3",
         "type": "mqtt-broker",
         "name": "",
@@ -401,7 +409,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 510,
+        "x": 730,
         "y": 40,
         "wires": [
             [
@@ -416,7 +424,7 @@
         "name": "Response",
         "statusCode": "",
         "headers": {},
-        "x": 680,
+        "x": 900,
         "y": 40,
         "wires": []
     },
@@ -473,31 +481,6 @@
         "x": 850,
         "y": 40,
         "wires": []
-    },
-    {
-        "id": "1de8161e1670597e",
-        "type": "change",
-        "z": "eb68ce8f2177d05e",
-        "name": "Global Hall Toe Light",
-        "rules": [
-            {
-                "t": "set",
-                "p": "hall.toeLight",
-                "pt": "global",
-                "to": "on",
-                "tot": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 820,
-        "y": 360,
-        "wires": [
-            []
-        ]
     },
     {
         "id": "1707fa89c8cba3d2",
@@ -632,7 +615,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 420,
+        "x": 300,
         "y": 40,
         "wires": [
             [
@@ -666,7 +649,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 420,
+        "x": 300,
         "y": 160,
         "wires": [
             [
@@ -750,7 +733,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 410,
+        "x": 290,
         "y": 260,
         "wires": [
             [
@@ -884,11 +867,10 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 400,
+        "x": 280,
         "y": 360,
         "wires": [
             [
-                "1de8161e1670597e",
                 "a95eeb54f4f1b3a4"
             ]
         ]

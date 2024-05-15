@@ -1,16 +1,5 @@
 version: '3.8'
 services:
-  node-red:
-    image: nodered/node-red
-    container_name: node-red
-    restart: unless-stopped
-    ports:
-      - '1880:1880'
-    volumes:
-      - './node-red/data:/data'
-    links:
-      - influxdb
-
   mosquitto:
     image: eclipse-mosquitto
     container_name: mosquitto
@@ -22,6 +11,17 @@ services:
       - './mosquitto/config:/mosquitto/config'
       - './mosquitto/data:/mosquitto/data'
       - './mosquitto/log:/mosquitto/log'
+
+  node-red:
+    image: nodered/node-red
+    container_name: node-red
+    restart: unless-stopped
+    ports:
+      - '1880:1880'
+    volumes:
+      - './node-red/data:/data'
+    links:
+      - influxdb
 
   influxdb:
     image: influxdb

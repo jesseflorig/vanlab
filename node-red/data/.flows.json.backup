@@ -23,6 +23,14 @@
         "env": []
     },
     {
+        "id": "4bcaeb20b443d19a",
+        "type": "tab",
+        "label": "Simulator",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "7077e724f4a04ab3",
         "type": "mqtt-broker",
         "name": "",
@@ -258,7 +266,7 @@
         "type": "function",
         "z": "c75c795fb5b7933d",
         "name": "msg -> influx",
-        "func": "// destructure the message\nconst {topic, payload } = msg;\n\nconst topicArray = topic.split('/');\n\n// sanitize topic \nconst measurement = topicArray.join('_');\n\n// break topic into tags\nconst tag = {\n    location: topicArray[0],\n    zone: topicArray[1],\n    room: topicArray[2],\n    device: topicArray[3]\n};\n\n// break payload into fields\nconst field = {}\nObject.keys(payload).map(key => {\n    field[key] = payload[key]; \n});\n\nconst timestamp = Date.now();\n\n// return new msg\nreturn {\n    measurement,\n    tag,\n    tags: tag,\n    payload: {\n        tag,\n        tags: tag,\n        field,\n        timestamp\n    }\n};",
+        "func": "// destructure the message\nconst {topic, payload } = msg;\n\nconst topicArray = topic.split('/');\n\n// sanitize topic \nconst measurement = topicArray.join('_');\n\n// break topic into tags\nconst tags = {\n    location: topicArray[0],\n    zone: topicArray[1],\n    room: topicArray[2],\n    device: topicArray[3]\n};\n\n// break payload into fields\nconst fields = {}\nObject.keys(payload).map(key => {\n    fields[key] = payload[key]; \n});\n\nconst timestamp = Date.now();\n\n// return new msg\nreturn {\n    measurement,\n    payload: [fields, tags]\n};",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -475,31 +483,6 @@
         "wires": []
     },
     {
-        "id": "1de8161e1670597e",
-        "type": "change",
-        "z": "eb68ce8f2177d05e",
-        "name": "Global Hall Toe Light",
-        "rules": [
-            {
-                "t": "set",
-                "p": "hall.toeLight",
-                "pt": "global",
-                "to": "on",
-                "tot": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 820,
-        "y": 360,
-        "wires": [
-            []
-        ]
-    },
-    {
         "id": "1707fa89c8cba3d2",
         "type": "inject",
         "z": "eb68ce8f2177d05e",
@@ -632,7 +615,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 420,
+        "x": 300,
         "y": 40,
         "wires": [
             [
@@ -666,7 +649,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 420,
+        "x": 300,
         "y": 160,
         "wires": [
             [
@@ -750,7 +733,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 410,
+        "x": 290,
         "y": 260,
         "wires": [
             [
@@ -884,11 +867,10 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 400,
+        "x": 280,
         "y": 360,
         "wires": [
             [
-                "1de8161e1670597e",
                 "a95eeb54f4f1b3a4"
             ]
         ]
