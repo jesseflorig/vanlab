@@ -500,7 +500,7 @@
         "onceDelay": 0.1,
         "topic": "",
         "x": 110,
-        "y": 160,
+        "y": 220,
         "wires": [
             [
                 "ccc6bab9fe5297bc"
@@ -525,7 +525,7 @@
         "onceDelay": 0.1,
         "topic": "",
         "x": 110,
-        "y": 200,
+        "y": 260,
         "wires": [
             [
                 "ccc6bab9fe5297bc"
@@ -597,13 +597,6 @@
             },
             {
                 "t": "set",
-                "p": "payload.locked",
-                "pt": "msg",
-                "to": "door.locked",
-                "tot": "global"
-            },
-            {
-                "t": "set",
                 "p": "payload.manual",
                 "pt": "msg",
                 "to": "1",
@@ -650,7 +643,7 @@
         "to": "",
         "reg": false,
         "x": 300,
-        "y": 160,
+        "y": 220,
         "wires": [
             [
                 "a95eeb54f4f1b3a4"
@@ -675,7 +668,7 @@
         "onceDelay": 0.1,
         "topic": "",
         "x": 110,
-        "y": 260,
+        "y": 320,
         "wires": [
             [
                 "4cf0af937ee961b0"
@@ -700,7 +693,7 @@
         "onceDelay": 0.1,
         "topic": "",
         "x": 110,
-        "y": 300,
+        "y": 360,
         "wires": [
             [
                 "4cf0af937ee961b0"
@@ -734,7 +727,7 @@
         "to": "",
         "reg": false,
         "x": 290,
-        "y": 260,
+        "y": 320,
         "wires": [
             [
                 "a95eeb54f4f1b3a4"
@@ -759,7 +752,7 @@
         "onceDelay": 0.1,
         "topic": "",
         "x": 110,
-        "y": 360,
+        "y": 420,
         "wires": [
             [
                 "8dd7cab25041176d"
@@ -784,7 +777,7 @@
         "onceDelay": 0.1,
         "topic": "",
         "x": 110,
-        "y": 400,
+        "y": 460,
         "wires": [
             [
                 "8dd7cab25041176d"
@@ -809,7 +802,7 @@
         "onceDelay": 0.1,
         "topic": "",
         "x": 110,
-        "y": 440,
+        "y": 500,
         "wires": [
             [
                 "8dd7cab25041176d"
@@ -834,7 +827,7 @@
         "onceDelay": 0.1,
         "topic": "",
         "x": 110,
-        "y": 480,
+        "y": 540,
         "wires": [
             [
                 "8dd7cab25041176d"
@@ -868,10 +861,60 @@
         "to": "",
         "reg": false,
         "x": 280,
-        "y": 360,
+        "y": 420,
         "wires": [
             [
                 "a95eeb54f4f1b3a4"
+            ]
+        ]
+    },
+    {
+        "id": "9e0a20f5b8083822",
+        "type": "inject",
+        "z": "eb68ce8f2177d05e",
+        "name": "Lock",
+        "props": [
+            {
+                "p": "payload.locked",
+                "v": "1",
+                "vt": "num"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 110,
+        "y": 120,
+        "wires": [
+            [
+                "95df891a0394ca17"
+            ]
+        ]
+    },
+    {
+        "id": "a8a2c8f6c657a127",
+        "type": "inject",
+        "z": "eb68ce8f2177d05e",
+        "name": "Unlock",
+        "props": [
+            {
+                "p": "payload.locked",
+                "v": "0",
+                "vt": "num"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 110,
+        "y": 160,
+        "wires": [
+            [
+                "95df891a0394ca17"
             ]
         ]
     }
