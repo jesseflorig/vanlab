@@ -409,7 +409,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 510,
+        "x": 730,
         "y": 40,
         "wires": [
             [
@@ -424,7 +424,7 @@
         "name": "Response",
         "statusCode": "",
         "headers": {},
-        "x": 680,
+        "x": 900,
         "y": 40,
         "wires": []
     },
@@ -449,14 +449,14 @@
         "id": "302ae7f3e52bbd0f",
         "type": "function",
         "z": "b5a1e0a0d2cea72d",
-        "name": "Global Payload",
+        "name": "Current Global Context",
         "func": "msg.payload = {}\n\nconst keys = global.keys()\nkeys.map(key => {\n    msg.payload[key] = global.get(key)\n})\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 320,
+        "x": 350,
         "y": 100,
         "wires": [
             [
