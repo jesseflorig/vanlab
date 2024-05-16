@@ -1,5 +1,12 @@
 user nodered
-topic readwrite fleet1/#
+topic read fleet1/#
+topic write fleet1/exterior/starboard/#
+topic write fleet1/interior/hall/#
 
 user dashboard
 topic read fleet1/#
+topic write fleet1/interior/hall/#
+
+user pico
+topic write fleet1/pico/status
+topic readwrite fleet1/interior/hall/#
