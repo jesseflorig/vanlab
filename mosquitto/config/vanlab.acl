@@ -11,4 +11,5 @@ topic write fleet1/exterior/starboard/#
 
 user pico
 topic write fleet1/pico/status
+topic write fleet1/feather/status
 topic readwrite fleet1/interior/hall/#

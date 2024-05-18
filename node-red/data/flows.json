@@ -353,11 +353,11 @@
         "type": "http in",
         "z": "b5a1e0a0d2cea72d",
         "name": "",
-        "url": "/hello-json",
+        "url": "/hello",
         "method": "get",
         "upload": false,
         "swaggerDoc": "",
-        "x": 120,
+        "x": 100,
         "y": 40,
         "wires": [
             [
@@ -915,6 +915,83 @@
         "wires": [
             [
                 "95df891a0394ca17"
+            ]
+        ]
+    },
+    {
+        "id": "858ae450e9885109",
+        "type": "inject",
+        "z": "eb68ce8f2177d05e",
+        "name": "On",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "1",
+        "payloadType": "num",
+        "x": 110,
+        "y": 600,
+        "wires": [
+            [
+                "215b2b13cb4e321b"
+            ]
+        ]
+    },
+    {
+        "id": "4ecbb30d7a759a50",
+        "type": "inject",
+        "z": "eb68ce8f2177d05e",
+        "name": "Off",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "0",
+        "payloadType": "num",
+        "x": 110,
+        "y": 640,
+        "wires": [
+            [
+                "215b2b13cb4e321b"
+            ]
+        ]
+    },
+    {
+        "id": "215b2b13cb4e321b",
+        "type": "change",
+        "z": "eb68ce8f2177d05e",
+        "name": "Hall Test",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "fleet1/interior/hall/test",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 260,
+        "y": 600,
+        "wires": [
+            [
+                "a95eeb54f4f1b3a4"
             ]
         ]
     }
