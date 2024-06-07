@@ -1,0 +1,15 @@
+user nodered
+topic read fleet1/#
+topic write fleet1/interior/hall/#
+topic write fleet1/exterior/starboard/#
+
+user dashboard
+topic read fleet1/#
+topic write fleet1/interior/office/#
+topic write fleet1/interior/hall/#
+topic write fleet1/exterior/starboard/#
+
+user pico
+topic write fleet1/pico/status
+topic write fleet1/feather/status
+topic readwrite fleet1/interior/hall/#
