@@ -1,5 +1,5 @@
 user nodered
-topic read fleet1/#
+topic read #
 topic write fleet1/interior/hall/#
 topic write fleet1/exterior/starboard/#
 

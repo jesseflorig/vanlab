@@ -14,6 +14,8 @@ services:
     image: nodered/node-red
     container_name: node-red
     restart: unless-stopped
+    depends_on:
+      - influxdb
     ports:
       - '1880:1880'
     env_file:
@@ -50,6 +52,8 @@ services:
     environment:
       - GF_SECURITY_ADMIN_USER=${GRAFANA_USER}
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+    links:
+      - influxdb
 
 volumes:
   mosquitto_data:
