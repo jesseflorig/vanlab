@@ -14,9 +14,13 @@ Clone the project, navigate into the directory, create the `.env`, and run `make
 ```
 git clone git@github.com:jesseflorig/vanlab.git
 cd vanlab
-cp .env.example .env
+cp .env.example .env  # modify your .env as needed
 make start
 ```
+Then visit the following dashboards in your browser:
+- __Node Red__: `locahost:1880`
+- __InfluxDB__: `locahost:8086` (creds defined in `.env`)
+- __Grafana__: `locahost:3000` (creds defined in `.env`)
 
 ### MQTT node in Node-RED
 In Node-RED, you can reference the Mosquitto container name, `mosquitto` when configuring your MQTT connection. In the "Security" tab, use `vanlab:test` for username and password.
