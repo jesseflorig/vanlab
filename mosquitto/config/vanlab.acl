@@ -1,5 +1,6 @@
 user nodered
 topic read #
+topic write fleet1/pico/test
 topic write fleet1/interior/hall/#
 topic write fleet1/exterior/starboard/#
 
@@ -12,4 +13,5 @@ topic write fleet1/exterior/starboard/#
 user pico
 topic write fleet1/pico/status
 topic write fleet1/feather/status
+topic read fleet1/pico/test
 topic readwrite fleet1/interior/hall/#
