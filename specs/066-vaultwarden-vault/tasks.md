@@ -30,9 +30,9 @@
 
 - [x] T005 Create `manifests/vaultwarden/prereqs/namespace.yaml` — Namespace `vaultwarden`, sync wave 0, labels `app.kubernetes.io/name: vaultwarden` and `argocd.argoproj.io/instance: vaultwarden-prereqs`
 - [x] T006 Extend `playbooks/utilities/seal-secrets.yml` with a new task block for `vaultwarden-admin-token` Secret in namespace `vaultwarden` with key `admin-token` from `{{ vaultwarden_admin_token }}` — follow the identical pattern used for `opnsense-exporter-credentials`; output file: `manifests/vaultwarden/prereqs/sealed-secrets.yaml`
-- [ ] T007 Run `ansible-playbook playbooks/utilities/seal-secrets.yml` to generate `manifests/vaultwarden/prereqs/sealed-secrets.yaml` — verify the file is created and contains a valid SealedSecret with sync-wave annotation `"1"`
+- [x] T007 Run `ansible-playbook playbooks/utilities/seal-secrets.yml` to generate `manifests/vaultwarden/prereqs/sealed-secrets.yaml` — verify the file is created and contains a valid SealedSecret with sync-wave annotation `"1"`
 - [x] T008 Add `- hostname: vault` to the `fleet1_lan_traefik_dns_records` list in `playbooks/network/network-deploy.yml` — follows the same pattern as `argocd`, `minio`, `grafana`, etc.
-- [ ] T009 Run `ansible-playbook -i hosts.ini playbooks/network/network-deploy.yml` to register `vault.fleet1.lan` in OPNsense unbound — verify with `nslookup vault.fleet1.lan 10.1.1.1`
+- [x] T009 Run `ansible-playbook -i hosts.ini playbooks/network/network-deploy.yml` to register `vault.fleet1.lan` in OPNsense unbound — verify with `nslookup vault.fleet1.lan 10.1.1.1`
 - [x] T010 Create `manifests/vaultwarden/prereqs/ingress-route.yaml` — Traefik IngressRoute for `vault.fleet1.lan`, entrypoint `websecure`, standard TLS (empty `tls: {}` block — no device-mTLS per research.md R3), routing to service `vaultwarden` port 80, sync wave 2
 - [x] T011 Create `manifests/argocd/prereqs/` ArgoCD Application for `vaultwarden-prereqs` targeting `manifests/vaultwarden/prereqs/` — follow the established prereqs Application pattern from other services (e.g., `manifests/minio/prereqs/`)
 
@@ -52,11 +52,11 @@
 - [x] T013 [US2] Create `manifests/vaultwarden/vaultwarden-values.yaml` with `signupsAllowed: true` (temporary for bootstrap), `adminToken.existingSecret: vaultwarden-admin-token`, `adminToken.existingSecretKey: admin-token`, `storage.data.name: vaultwarden-data`, `storage.data.size: 1Gi`, `storage.data.class: longhorn` (note: key is `class` not `storageClass`), `ingress.enabled: false`, image tag pinned per T001
 - [x] T014 [US2] Create `manifests/vaultwarden/apps/vaultwarden-app.yaml` — multi-source ArgoCD Application: source 1 is guerzon/vaultwarden chart at pinned version, source 2 is Gitea repo supplying `manifests/vaultwarden/vaultwarden-values.yaml`; destination namespace `vaultwarden`; `automated.prune: true`, `automated.selfHeal: true`, `retry.limit: 5` with exponential backoff — follow the minio-app.yaml pattern exactly
 - [x] T015 [US2] Register `vaultwarden-prereqs` in `group_vars/all.yml` under `argocd_apps`; note multi-source `vaultwarden` app must be applied directly via `kubectl apply`
-- [ ] T016 [US2] Commit all files (namespace, ingress-route, sealed-secrets, values, app manifests, network-deploy.yml, example.all.yml, seal-secrets.yml) and push to Gitea: `git push gitea 066-vaultwarden-vault`
-- [ ] T017 [US2] Bootstrap ArgoCD Applications: `ansible-playbook -i hosts.ini playbooks/cluster/services-deploy.yml --tags argocd-bootstrap` — monitor sync at `https://argocd.fleet1.lan` until `vaultwarden-prereqs` and `vaultwarden` are both `Synced` + `Healthy`
-- [ ] T018 [US2] Register admin account: navigate to `https://vault.fleet1.lan` and create the single admin account — do this within the `signupsAllowed: true` window before the next step
-- [ ] T019 [US2] Disable registrations: update `manifests/vaultwarden/vaultwarden-values.yaml` to set `signupsAllowed: false`, commit, push to Gitea — ArgoCD will re-sync; verify a second registration attempt is rejected at `https://vault.fleet1.lan`
-- [ ] T020 [US2] Store initial recovery items in vault: log in and create entries for Authentik TOTP seed placeholder, recovery code placeholder, and ArgoCD admin password — these will be populated during spec 063
+- [x] T016 [US2] Commit all files (namespace, ingress-route, sealed-secrets, values, app manifests, network-deploy.yml, example.all.yml, seal-secrets.yml) and push to Gitea: `git push gitea 066-vaultwarden-vault`
+- [x] T017 [US2] Bootstrap ArgoCD Applications: `ansible-playbook -i hosts.ini playbooks/cluster/services-deploy.yml --tags argocd-bootstrap` — monitor sync at `https://argocd.fleet1.lan` until `vaultwarden-prereqs` and `vaultwarden` are both `Synced` + `Healthy`
+- [x] T018 [US2] Register admin account: navigate to `https://vault.fleet1.lan` and create the single admin account — do this within the `signupsAllowed: true` window before the next step
+- [x] T019 [US2] Disable registrations: update `manifests/vaultwarden/vaultwarden-values.yaml` to set `signupsAllowed: false`, commit, push to Gitea — ArgoCD will re-sync; verify a second registration attempt is rejected at `https://vault.fleet1.lan`
+- [x] T020 [US2] Store initial recovery items in vault: log in and create entries for Authentik TOTP seed placeholder, recovery code placeholder, and ArgoCD admin password — these will be populated during spec 063
 
 ---
 
@@ -66,9 +66,9 @@
 
 **Independent Test**: Scale Authentik to zero replicas (or skip — Authentik isn't deployed yet), verify `https://vault.fleet1.lan` loads and the admin account is accessible.
 
-- [ ] T021 [US1] Verify Vaultwarden independence from Authentik: since Authentik is not yet deployed, confirm no Authentik middleware is on the IngressRoute — run `kubectl --context=default get ingressroute vaultwarden -n vaultwarden -o yaml` and confirm no `middlewares:` block referencing Authentik exists
-- [ ] T022 [US1] Verify TLS — confirm no device-mTLS: access `https://vault.fleet1.lan` from a browser without a client certificate installed and confirm the login page loads (device-mTLS would return a 400/handshake error)
-- [ ] T023 [US1] Document Authentik-outage access test in `specs/066-vaultwarden-vault/spec.md` acceptance scenario 1 — mark it as verified with date
+- [x] T021 [US1] Verify Vaultwarden independence from Authentik: since Authentik is not yet deployed, confirm no Authentik middleware is on the IngressRoute — run `kubectl --context=default get ingressroute vaultwarden -n vaultwarden -o yaml` and confirm no `middlewares:` block referencing Authentik exists
+- [x] T022 [US1] Verify TLS — confirm no device-mTLS: access `https://vault.fleet1.lan` from a browser without a client certificate installed and confirm the login page loads (device-mTLS would return a 400/handshake error)
+- [x] T023 [US1] Document Authentik-outage access test in `specs/066-vaultwarden-vault/spec.md` acceptance scenario 1 — mark it as verified with date
 
 ---
 
@@ -78,18 +78,18 @@
 
 **Independent Test**: Store a test item, delete the pod, wait for reschedule, confirm item is still present.
 
-- [ ] T024 [US3] Store a canary test item in the vault (e.g., "Pod restart test — 2026-05-22") before the restart test
-- [ ] T025 [US3] Delete the Vaultwarden pod and wait for reschedule: `kubectl --context=default delete pod -n vaultwarden -l app.kubernetes.io/name=vaultwarden` — wait for new pod to reach Running state
-- [ ] T026 [US3] Log back in to `https://vault.fleet1.lan` and confirm the canary test item is present — delete it after verification
-- [ ] T027 [US3] Verify Longhorn PVC is bound and healthy: `kubectl --context=default get pvc -n vaultwarden` — confirm `STATUS: Bound` and `STORAGECLASS: longhorn`
+- [x] T024 [US3] Store a canary test item in the vault (e.g., "Pod restart test — 2026-05-22") before the restart test
+- [x] T025 [US3] Delete the Vaultwarden pod and wait for reschedule: `kubectl --context=default delete pod -n vaultwarden -l app.kubernetes.io/name=vaultwarden` — wait for new pod to reach Running state
+- [x] T026 [US3] Log back in to `https://vault.fleet1.lan` and confirm the canary test item is present — delete it after verification
+- [x] T027 [US3] Verify Longhorn PVC is bound and healthy: `kubectl --context=default get pvc -n vaultwarden` — confirm `STATUS: Bound` and `STORAGECLASS: longhorn`
 
 ---
 
 ## Phase 6: Polish & Cross-Cutting Concerns
 
 - [x] T028 Add Vaultwarden PVC to Longhorn Tier A backup label list in `playbooks/utilities/label-pvcs.yml`: add `{ name: vaultwarden-data, namespace: vaultwarden }` to the loop — re-run after deploy
-- [ ] T029 Update `specs/063-authentik-idp/spec.md` — change the Vaultwarden hard dependency from "new spec required" to "✅ Spec 066 deployed" and add the `vault.fleet1.lan` URL
-- [ ] T030 Update spec status: set `specs/066-vaultwarden-vault/spec.md` Status field from `Draft` to `Deployed`
+- [x] T029 Update `specs/063-authentik-idp/spec.md` — change the Vaultwarden hard dependency from "new spec required" to "✅ Spec 066 deployed" and add the `vault.fleet1.lan` URL
+- [x] T030 Update spec status: set `specs/066-vaultwarden-vault/spec.md` Status field from `Draft` to `Deployed`
 
 ---
 
