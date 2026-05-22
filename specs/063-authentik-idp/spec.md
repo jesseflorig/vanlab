@@ -2,7 +2,7 @@
 
 **Feature Branch**: `063-authentik-idp`
 **Created**: 2026-05-11
-**Status**: Clarified — ready for `/speckit.plan`
+**Status**: Deployed
 **Input**: User description: "Stand up Authentik as the cluster's SSO identity provider. No app integration yet — just a working IdP, MFA enrolled, observability wired, backups in place."
 
 ---
