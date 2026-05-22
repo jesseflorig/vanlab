@@ -34,6 +34,7 @@ alertmanager:
               storage: {{ alertmanager_storage_size }}
 
 grafana:
+  assertNoLeakedSecrets: false
   adminPassword: "{{ grafana_admin_password }}"
   additionalDataSources:
     - name: Loki
@@ -73,6 +74,23 @@ grafana:
           disableDeletion: false
           options:
             path: /var/lib/grafana/dashboards/default
+  grafana.ini:
+    server:
+      root_url: https://grafana.fleet1.lan
+    auth.generic_oauth:
+      enabled: true
+      name: Authentik
+      allow_sign_up: true
+      scopes: openid profile email groups
+      auth_url: https://authentik.fleet1.lan/application/o/authorize/
+      token_url: http://authentik-server.authentik.svc.cluster.local/application/o/token/
+      api_url: http://authentik-server.authentik.svc.cluster.local/application/o/userinfo/
+      client_id: "{{ grafana_oidc_client_id }}"
+      client_secret: "{{ grafana_oidc_client_secret }}"
+      redirect_url: https://grafana.fleet1.lan/login/generic_oauth
+      role_attribute_path: "contains(groups[*], 'admins') && 'Admin' || 'Viewer'"
+      role_attribute_strict: false
+      allow_assign_grafana_admin: true
 
 # Disable K3s unavailable control-plane scrapers
 # K3s embeds these in the kubelet process — standard metrics ports not exposed

@@ -1,6 +1,8 @@
 configs:
   secret:
     argocdServerAdminPassword: "{{ argocd_admin_password_bcrypt }}"
+    extra:
+      oidc.authentik.clientSecret: "{{ argocd_oidc_client_secret }}"
   cm:
     # Ingress resources never get a LoadBalancer IP with NodePort Traefik.
     # This custom health check marks all Ingress resources as Healthy immediately.
@@ -8,6 +10,23 @@ configs:
       hs = {}
       hs.status = "Healthy"
       return hs
+    oidc.config: |
+      name: Authentik
+      issuer: https://authentik.fleet1.lan/application/o/argocd/
+      clientID: argocd
+      clientSecret: $oidc.authentik.clientSecret
+      requestedScopes:
+        - openid
+        - profile
+        - email
+        - groups
+      requestedIDTokenClaims:
+        groups:
+          essential: true
+  rbac:
+    scopes: '[groups]'
+    policy.csv: |
+      g, admins, role:admin
 
 server:
   ingress:

@@ -244,3 +244,12 @@ authentik_secret_key: CHANGEME
 authentik_db_password: CHANGEME
 # Generate with: openssl rand -hex 24
 authentik_db_superuser_password: CHANGEME
+
+# ── Authentik OIDC App Integration (064-authentik-oidc-apps) ─────────────────
+# Generate with: openssl rand -hex 32
+grafana_oidc_client_id: grafana
+grafana_oidc_client_secret: CHANGEME
+gitea_oidc_client_id: gitea
+gitea_oidc_client_secret: CHANGEME
+argocd_oidc_client_id: argocd
+argocd_oidc_client_secret: CHANGEME

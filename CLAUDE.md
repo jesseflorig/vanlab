@@ -39,6 +39,7 @@ Auto-generated from all feature plans. Last updated: 2026-05-22
 - Longhorn PVC, 1Gi, `storageClassName: longhorn` (066-vaultwarden-vault)
 - YAML (Kubernetes manifests + Helm values) + goauthentik/authentik Helm chart v2026.5.0; bitnami/postgresql (bundled subchart); bitnami/valkey (bundled subchart); Traefik v3 (existing); cert-manager wildcard cert (spec 054, existing); Longhorn v1.11.1 (existing); Sealed Secrets controller (existing); ArgoCD (existing) (063-authentik-idp)
 - Longhorn PVC `data-authentik-postgresql-0` (10Gi, Tier A backup); Longhorn PVC for Valkey master (1Gi, no backup — cache only) (063-authentik-idp)
+- N/A — no new PVCs (064-authentik-oidc-apps)
 
 - YAML (Ansible 2.x) — follows existing project conventions + `smartmontools` (apt) — installed idempotently by the playbook as a (001-node-disk-health)
 
@@ -58,9 +59,9 @@ tests/
 YAML (Ansible 2.x) — follows existing project conventions: Follow standard conventions
 
 ## Recent Changes
+- 064-authentik-oidc-apps: Added YAML (Ansible 2.x + Kubernetes manifests)
 - 063-authentik-idp: Added YAML (Kubernetes manifests + Helm values) + goauthentik/authentik Helm chart v2026.5.0; bitnami/postgresql (bundled subchart); bitnami/valkey (bundled subchart); Traefik v3 (existing); cert-manager wildcard cert (spec 054, existing); Longhorn v1.11.1 (existing); Sealed Secrets controller (existing); ArgoCD (existing)
 - 066-vaultwarden-vault: Added YAML (Kubernetes manifests + Helm values) + guerzon/vaultwarden Helm chart (version pinned at plan time — see research.md), Traefik v3 (existing), cert-manager wildcard cert (spec 054, existing), Longhorn v1.11.1 (existing), Sealed Secrets controller (existing), ArgoCD (existing)
-- 061-longhorn-backup-target: Added YAML (Ansible 2.x + Kubernetes manifests, Longhorn CRDs `longhorn.io/v1beta2`) + Longhorn v1.11.1, ArgoCD, Sealed Secrets controller, kube-prometheus-stack (PrometheusRule CRD)
 
 
 <!-- MANUAL ADDITIONS START -->

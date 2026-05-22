@@ -3,12 +3,26 @@ gitea:
     username: "{{ gitea_admin_username }}"
     password: "{{ gitea_admin_password }}"
     email: "{{ gitea_admin_email }}"
+  oauth:
+    - name: authentik
+      provider: openidConnect
+      key: "{{ gitea_oidc_client_id }}"
+      secret: "{{ gitea_oidc_client_secret }}"
+      autoDiscoverUrl: https://authentik.fleet1.lan/application/o/gitea/.well-known/openid-configuration
+      scopes: "openid profile email groups"
+      groupClaimName: groups
+      adminGroup: admins
   config:
     database:
       DB_TYPE: sqlite3
     server:
       DOMAIN: "{{ gitea_hostname }}"
       ROOT_URL: "https://{{ gitea_hostname }}"
+    oauth2_client:
+      ENABLE_AUTO_REGISTRATION: true
+      USERNAME: preferred_username
+      UPDATE_AVATAR: true
+      ACCOUNT_LINKING: login
 
 # Disable PostgreSQL and Redis subcharts — using SQLite
 postgresql-ha:
