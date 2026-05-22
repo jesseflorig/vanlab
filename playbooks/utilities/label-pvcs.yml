@@ -10,8 +10,8 @@
 # Tier B (3-day snapshot / 2-week backup — monitoring PVCs, reconstructible):
 #   Prometheus, Alertmanager, Grafana
 #
-# When spec 063 (Authentik) deploys, add its Postgres PVC to Tier A by adding
-# an entry to the tier_a_named section and re-running this playbook.
+# When spec 063 (Authentik) deploys, add its Postgres PVC to Tier A:
+#   - { name: authentik-postgresql-0, namespace: authentik }
 
 - name: Apply Longhorn RecurringJob group labels to critical PVCs
   hosts: servers[0]
@@ -34,6 +34,7 @@
         - { name: gitea-shared-storage, namespace: gitea }
         - { name: mosquitto-data,       namespace: home-automation }
         - { name: frigate-clips,        namespace: frigate }
+        - { name: vaultwarden-data,     namespace: vaultwarden }
       register: label_tier_a_named
       changed_when: "'labeled' in label_tier_a_named.stdout or 'already' not in label_tier_a_named.stdout"
 
@@ -161,6 +162,7 @@
         msg:
           - "Tier A labels applied:"
           - "  gitea-shared-storage (gitea)"
+          - "  vaultwarden-data (vaultwarden)"
           - "  {{ loki_pvc_name.stdout }} (monitoring)"
           - "  {{ ha_pvc_name.stdout }} (home-automation)"
           - "  {{ nodered_pvc_name.stdout }} (home-automation)"

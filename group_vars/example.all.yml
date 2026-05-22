@@ -232,3 +232,7 @@ wireguard_server_public_key: <SERVER_PUBLIC_KEY>
 # Management Laptop Keys
 wireguard_client_private_key: <CLIENT_PRIVATE_KEY>
 wireguard_client_public_key: <CLIENT_PUBLIC_KEY>
+
+# ── Vaultwarden Password Vault (066-vaultwarden-vault) ───────────────────────
+# Generate with: openssl rand -hex 32
+vaultwarden_admin_token: CHANGEME

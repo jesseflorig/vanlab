@@ -1,0 +1,45 @@
+---
+# ArgoCD Application: Vaultwarden Password Vault
+# Multi-source: Helm chart from guerzon/vaultwarden + values file from this Gitea repo.
+#
+# Chart pinned to 0.36.4 (stable as of 2026-05-22).
+# To upgrade: bump targetRevision, run `helm show values vaultwarden/vaultwarden --version <new>`
+# to check for key renames (particularly storage.data.class), update vaultwarden-values.yaml.
+#
+# IMPORTANT: This is a multi-source Application — it cannot be applied via argocd_apps in
+# group_vars/all.yml. Apply directly:
+#   kubectl --context=default apply -f manifests/vaultwarden/apps/vaultwarden-app.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vaultwarden
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  sources:
+    - repoURL: https://guerzon.github.io/vaultwarden
+      chart: vaultwarden
+      targetRevision: "0.36.4"
+      helm:
+        valueFiles:
+          - $values/manifests/vaultwarden/vaultwarden-values.yaml
+    - repoURL: https://gitea.fleet1.cloud:30443/gitadmin/vanlab.git
+      targetRevision: main
+      ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: vaultwarden
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 30s
+        factor: 2
+        maxDuration: 10m
