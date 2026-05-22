@@ -13,6 +13,19 @@ authentik:
   existingSecret:
     secretName: authentik-secrets
 
+# When existingSecret.secretName is set, all authentik.* values are bypassed (chart uses envFrom).
+# Non-secret config that would normally come from authentik.* must be set here via global.env.
+global:
+  env:
+    - name: AUTHENTIK_POSTGRESQL__HOST
+      value: authentik-postgresql
+    - name: AUTHENTIK_POSTGRESQL__NAME
+      value: authentik
+    - name: AUTHENTIK_POSTGRESQL__USER
+      value: authentik
+    - name: AUTHENTIK_POSTGRESQL__PORT
+      value: "5432"
+
 postgresql:
   enabled: true
   auth:
