@@ -2,7 +2,7 @@
 
 **Feature Branch**: `063-authentik-idp`
 **Created**: 2026-05-11
-**Status**: Clarified — ready for `/speckit.plan` (pending Vaultwarden prerequisite spec)
+**Status**: Clarified — ready for `/speckit.plan`
 **Input**: User description: "Stand up Authentik as the cluster's SSO identity provider. No app integration yet — just a working IdP, MFA enrolled, observability wired, backups in place."
 
 ---
@@ -16,7 +16,7 @@
 - Q: Are both YubiKeys purchased and physically in hand? → A: Yes, both on hand.
 - Q: How should exported blueprints get into the vanlab Git repo? → A: Manual — CronJob exports to PVC; `kubectl cp` and commit when needed.
 - Q: For the MFA-always-required posture, which flow approach? → A: Default flows + add a policy binding to enforce MFA on the existing authentication stage.
-- Q: Is Vaultwarden deployed and available as the out-of-band secrets vault? → A: Not deployed — Vaultwarden is a hard prerequisite; a new spec must be created and deployed before spec 063 can proceed.
+- Q: Is Vaultwarden deployed and available as the out-of-band secrets vault? → A: ✅ Deployed — Spec 066 shipped. Available at `https://vault.fleet1.lan`.
 - Q: Should `AuthentikOutpostDown` alert be in this spec or deferred to spec 065? → A: Defer to spec 065 — the alert is only actionable once Tier 1b apps depend on the outpost.
 
 ---
@@ -30,7 +30,7 @@
 - Single user (admin) at standup; group model designed for future multi-user.
 
 **Dependencies**:
-- **Hard**: Vaultwarden must be deployed before Authentik holds any meaningful state — it stores TOTP seeds and recovery codes and must not be behind Authentik (it is part of the recovery toolchain). A new spec is required for Vaultwarden; spec 063 is blocked until it ships.
+- **Hard**: Vaultwarden must be deployed before Authentik holds any meaningful state — it stores TOTP seeds and recovery codes and must not be behind Authentik (it is part of the recovery toolchain). ✅ **Spec 066 deployed** — available at `https://vault.fleet1.lan`.
 - **Hard**: Spec 061 (Longhorn backup target via MinIO) must be in place before Authentik holds any meaningful state. **✅ Spec 061 is deployed as of 2026-05-16** — BackupTarget active, RecurringJobs live, SealedSecret decrypted, all 7 ArgoCD resources Synced+Healthy.
 - **Soft**: Spec 059 (Tailscale) should be merged before Tier 1b forward-auth (spec 065) lands, so remote break-glass works.
 
