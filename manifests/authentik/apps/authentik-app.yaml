@@ -1,0 +1,45 @@
+---
+# ArgoCD Application: Authentik SSO Identity Provider
+# Multi-source: Helm chart from goauthentik/authentik + values file from this Gitea repo.
+#
+# Chart pinned to 2026.5.0 (stable as of 2026-05-22).
+# To upgrade: bump targetRevision, run helm show values to check for key renames,
+# update authentik-values.yaml accordingly.
+#
+# IMPORTANT: This is a multi-source Application — it cannot be applied via argocd_apps in
+# group_vars/all.yml. Apply directly:
+#   kubectl --context=default apply -f manifests/authentik/apps/authentik-app.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: authentik
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  sources:
+    - repoURL: https://charts.goauthentik.io
+      chart: authentik
+      targetRevision: "2026.5.0"
+      helm:
+        valueFiles:
+          - $values/manifests/authentik/authentik-values.yaml
+    - repoURL: https://gitea.fleet1.cloud:30443/gitadmin/vanlab.git
+      targetRevision: main
+      ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: authentik
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 30s
+        factor: 2
+        maxDuration: 10m
