@@ -5,13 +5,13 @@
 # It is idempotent — kubectl label --overwrite is safe to re-run at any time.
 #
 # Tier A (7-day snapshot / 4-week backup — data PVCs, source of truth):
-#   Gitea, Loki, Mosquitto, Home Assistant, Node-RED, InfluxDB, Frigate clips
+#   Gitea, Loki, Mosquitto, Home Assistant, Node-RED, InfluxDB, Frigate clips,
+#   Authentik PostgreSQL
 #
 # Tier B (3-day snapshot / 2-week backup — monitoring PVCs, reconstructible):
 #   Prometheus, Alertmanager, Grafana
 #
-# When spec 063 (Authentik) deploys, add its Postgres PVC to Tier A:
-#   - { name: authentik-postgresql-0, namespace: authentik }
+# ✅ spec 063 deployed — `data-authentik-postgresql-0` added
 
 - name: Apply Longhorn RecurringJob group labels to critical PVCs
   hosts: servers[0]
@@ -31,10 +31,11 @@
         recurring-job-group.longhorn.io/tier-a=enabled
         --overwrite
       loop:
-        - { name: gitea-shared-storage, namespace: gitea }
-        - { name: mosquitto-data,       namespace: home-automation }
-        - { name: frigate-clips,        namespace: frigate }
-        - { name: vaultwarden-data-vaultwarden-0, namespace: vaultwarden }
+        - { name: gitea-shared-storage,              namespace: gitea }
+        - { name: mosquitto-data,                   namespace: home-automation }
+        - { name: frigate-clips,                    namespace: frigate }
+        - { name: vaultwarden-data-vaultwarden-0,   namespace: vaultwarden }
+        - { name: data-authentik-postgresql-0,      namespace: authentik }
       register: label_tier_a_named
       changed_when: "'labeled' in label_tier_a_named.stdout or 'already' not in label_tier_a_named.stdout"
 
@@ -163,6 +164,7 @@
           - "Tier A labels applied:"
           - "  gitea-shared-storage (gitea)"
           - "  vaultwarden-data-vaultwarden-0 (vaultwarden)"
+          - "  data-authentik-postgresql-0 (authentik)"
           - "  {{ loki_pvc_name.stdout }} (monitoring)"
           - "  {{ ha_pvc_name.stdout }} (home-automation)"
           - "  {{ nodered_pvc_name.stdout }} (home-automation)"

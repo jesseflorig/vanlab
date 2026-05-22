@@ -48,12 +48,12 @@
 
 - [X] T012 [US1] Create `manifests/authentik/authentik-values.yaml` — using T001-verified key paths: `authentik.existingSecret: authentik-secrets`, `postgresql.enabled: true`, `postgresql.auth.existingSecret: authentik-secrets`, `postgresql.auth.username: authentik`, `postgresql.auth.database: authentik`, `postgresql.primary.persistence.enabled: true`, `postgresql.primary.persistence.storageClass: longhorn`, `postgresql.primary.persistence.size: 10Gi`, valkey persistence keys (from T001), `server.metrics.enabled: true`, `server.metrics.serviceMonitor.enabled: true`, `server.metrics.serviceMonitor.labels.release: prometheus`, `worker.metrics.enabled: true`, `worker.metrics.serviceMonitor.enabled: true`, `worker.metrics.serviceMonitor.labels.release: prometheus`, `ingress.enabled: false`
 - [X] T013 [US1] Create `manifests/authentik/apps/authentik-app.yaml` — multi-source ArgoCD Application: source 1 is `authentik/authentik` chart at pinned version from T001, source 2 is Gitea repo supplying `manifests/authentik/authentik-values.yaml`; destination namespace `authentik`; `automated.prune: true`, `automated.selfHeal: true`, `retry.limit: 5` with exponential backoff — follow the `vaultwarden-app.yaml` pattern exactly; add comment that this must be applied directly via `kubectl apply`
-- [ ] T014 [US1] Commit all files (namespace, ingress-route, sealed-secrets, values, app manifests, network-deploy.yml, example.all.yml, seal-secrets.yml, all.yml argocd_apps entry) and push to Gitea on branch `063-authentik-idp`, then merge PR to `main` and update GitHub mirror
-- [ ] T015 [US1] Bootstrap ArgoCD Applications: `ansible-playbook -i hosts.ini playbooks/cluster/services-deploy.yml --tags argocd-bootstrap -e "ansible_ssh_common_args='-o StrictHostKeyChecking=no'"` — confirms `authentik-prereqs` is applied
-- [ ] T016 [US1] Apply multi-source Authentik app: `kubectl --context=default apply -f manifests/authentik/apps/authentik-app.yaml` — then trigger sync: `kubectl --context=default patch application authentik -n argocd --type merge -p '{"operation":{"initiatedBy":{"username":"admin"},"sync":{"revision":"HEAD"}}}'`
-- [ ] T017 [US1] Wait for all pods to reach Running/Ready: `kubectl --context=default get pods -n authentik` — confirm `authentik-server-*`, `authentik-worker-*`, and `authentik-postgresql-0` are all `1/1 Running`; confirm PVCs are `Bound` on `longhorn`
-- [ ] T018 [US1] Complete Authentik first-run setup wizard: navigate to `https://authentik.fleet1.lan`, set `akadmin` password — **immediately store password in Vaultwarden** under a new `Authentik Admin — Password` Login item at `https://authentik.fleet1.lan`
-- [ ] T019 [US1] Enroll TOTP MFA: log in as `akadmin` → gear icon → Settings → MFA Devices → Enroll → TOTP Authenticator → scan QR code → enter 6-digit code to confirm — **store TOTP seed in Vaultwarden** by updating the `Authentik Admin — TOTP Seed` placeholder entry with the actual base32 secret; also update `Authentik Admin — Recovery Codes` placeholder with any recovery codes Authentik generates
+- [X] T014 [US1] Commit all files (namespace, ingress-route, sealed-secrets, values, app manifests, network-deploy.yml, example.all.yml, seal-secrets.yml, all.yml argocd_apps entry) and push to Gitea on branch `063-authentik-idp`, then merge PR to `main` and update GitHub mirror
+- [X] T015 [US1] Bootstrap ArgoCD Applications: `ansible-playbook -i hosts.ini playbooks/cluster/services-deploy.yml --tags argocd-bootstrap -e "ansible_ssh_common_args='-o StrictHostKeyChecking=no'"` — confirms `authentik-prereqs` is applied
+- [X] T016 [US1] Apply multi-source Authentik app: `kubectl --context=default apply -f manifests/authentik/apps/authentik-app.yaml` — then trigger sync: `kubectl --context=default patch application authentik -n argocd --type merge -p '{"operation":{"initiatedBy":{"username":"admin"},"sync":{"revision":"HEAD"}}}'`
+- [X] T017 [US1] Wait for all pods to reach Running/Ready: `kubectl --context=default get pods -n authentik` — confirm `authentik-server-*`, `authentik-worker-*`, and `authentik-postgresql-0` are all `1/1 Running`; confirm PVCs are `Bound` on `longhorn`
+- [X] T018 [US1] Complete Authentik first-run setup wizard: navigate to `https://authentik.fleet1.lan`, set `akadmin` password — **immediately store password in Vaultwarden** under a new `Authentik Admin — Password` Login item at `https://authentik.fleet1.lan`
+- [X] T019 [US1] Enroll TOTP MFA: log in as `akadmin` → gear icon → Settings → MFA Devices → Enroll → TOTP Authenticator → scan QR code → enter 6-digit code to confirm — **store TOTP seed in Vaultwarden** by updating the `Authentik Admin — TOTP Seed` placeholder entry with the actual base32 secret; also update `Authentik Admin — Recovery Codes` placeholder with any recovery codes Authentik generates
 
 **Checkpoint**: `https://authentik.fleet1.lan` loads, akadmin login requires password + TOTP, credentials in Vaultwarden.
 
@@ -65,9 +65,9 @@
 
 **Independent Test**: In Prometheus UI (`https://prometheus.fleet1.lan` → Status → Targets) confirm two Authentik scrape targets are green. Query `authentik_policies_count` returns a value.
 
-- [ ] T020 [US2] Verify ServiceMonitors exist: `kubectl --context=default get servicemonitor -n authentik` — confirm both `authentik-server` and `authentik-worker` ServiceMonitors are present; if missing, check `server.metrics.serviceMonitor.enabled` in values and re-sync
-- [ ] T021 [US2] Verify Prometheus is scraping: navigate to `https://prometheus.fleet1.lan` → Status → Targets → search for `authentik` — confirm both targets show `State: UP`
-- [ ] T022 [US2] Verify metric export: in Prometheus query `authentik_policies_count` — confirm the query returns a non-error result (any numeric value confirms Authentik is exporting metrics correctly)
+- [X] T020 [US2] Verify ServiceMonitors exist: `kubectl --context=default get servicemonitor -n authentik` — confirm both `authentik-server` and `authentik-worker` ServiceMonitors are present; if missing, check `server.metrics.serviceMonitor.enabled` in values and re-sync
+- [X] T021 [US2] Verify Prometheus is scraping: navigate to `https://prometheus.fleet1.lan` → Status → Targets → search for `authentik` — confirm both targets show `State: UP`
+- [X] T022 [US2] Verify metric export: in Prometheus query `authentik_policies_count` — confirm the query returns a non-error result (any numeric value confirms Authentik is exporting metrics correctly)
 
 **Checkpoint**: Both Authentik scrape targets UP in Prometheus; metric queries return values.
 
@@ -79,9 +79,9 @@
 
 **Independent Test**: `blueprint-backup.yaml` exists in `specs/063-authentik-idp/`, is valid YAML, and contains at least one entry.
 
-- [ ] T023 [US3] Export blueprint from Authentik worker pod: `kubectl --context=default exec -n authentik deployment/authentik-worker -- ak export_blueprint > specs/063-authentik-idp/blueprint-backup.yaml` — verify file is created and non-empty
-- [ ] T024 [US3] Validate blueprint is parseable: `python3 -c "import yaml; d=yaml.safe_load(open('specs/063-authentik-idp/blueprint-backup.yaml')); print('OK —', len(d.get('entries',[])), 'entries')"` — confirm output is `OK — N entries` where N > 0
-- [ ] T025 [US3] Commit blueprint to Git on a new branch, PR to `main`: `git add specs/063-authentik-idp/blueprint-backup.yaml` — the blueprint contains no secret values (it describes flows/policies only) so it is safe to commit
+- [X] T023 [US3] Export blueprint from Authentik worker pod: `kubectl --context=default exec -n authentik deployment/authentik-worker -- ak export_blueprint > specs/063-authentik-idp/blueprint-backup.yaml` — verify file is created and non-empty
+- [X] T024 [US3] Validate blueprint is parseable: `python3 -c "import yaml; d=yaml.safe_load(open('specs/063-authentik-idp/blueprint-backup.yaml')); print('OK —', len(d.get('entries',[])), 'entries')"` — confirm output is `OK — N entries` where N > 0
+- [X] T025 [US3] Commit blueprint to Git on a new branch, PR to `main`: `git add specs/063-authentik-idp/blueprint-backup.yaml` — the blueprint contains no secret values (it describes flows/policies only) so it is safe to commit
 
 **Checkpoint**: Blueprint in Git; Authentik configuration is recoverable from Git + Longhorn backup.
 
@@ -89,9 +89,9 @@
 
 ## Phase 6: Polish & Cross-Cutting Concerns
 
-- [ ] T026 Add Authentik PostgreSQL PVC to Longhorn Tier A backup label list in `playbooks/utilities/label-pvcs.yml`: add `{ name: data-authentik-postgresql-0, namespace: authentik }` to the named PVC loop — also update the header comment to include Authentik; re-run playbook after confirming PVC name with `kubectl --context=default get pvc -n authentik`
-- [ ] T027 Update `specs/063-authentik-idp/spec.md` status field from `Clarified — ready for /speckit.plan` to `Deployed`
-- [ ] T028 Update `playbooks/utilities/label-pvcs.yml` header comment: change "When spec 063 (Authentik) deploys, add its Postgres PVC to Tier A" note to "✅ spec 063 deployed — `data-authentik-postgresql-0` added"
+- [X] T026 Add Authentik PostgreSQL PVC to Longhorn Tier A backup label list in `playbooks/utilities/label-pvcs.yml`: add `{ name: data-authentik-postgresql-0, namespace: authentik }` to the named PVC loop — also update the header comment to include Authentik; re-run playbook after confirming PVC name with `kubectl --context=default get pvc -n authentik`
+- [X] T027 Update `specs/063-authentik-idp/spec.md` status field from `Clarified — ready for /speckit.plan` to `Deployed`
+- [X] T028 Update `playbooks/utilities/label-pvcs.yml` header comment: change "When spec 063 (Authentik) deploys, add its Postgres PVC to Tier A" note to "✅ spec 063 deployed — `data-authentik-postgresql-0` added"
 
 ---
 
