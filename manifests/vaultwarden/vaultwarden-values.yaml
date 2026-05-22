@@ -11,7 +11,7 @@ image:
 
 ## Signups — set true only during initial admin account bootstrap, then set back to false.
 ## See tasks.md T018/T019 for the bootstrap sequence.
-signupsAllowed: true
+signupsAllowed: false
 
 ## Admin token — injected from SealedSecret; never set inline.
 adminToken:
