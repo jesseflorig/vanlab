@@ -19,8 +19,8 @@ The admin needs to retrieve an MFA recovery code, TOTP seed, or break-glass cred
 
 **Acceptance Scenarios**:
 
-1. **Given** Authentik is down (pods not running), **When** the admin navigates to `https://vault.fleet1.lan`, **Then** the Vaultwarden login page loads and credentials are accessible.
-2. **Given** a valid master password, **When** the admin logs into Vaultwarden, **Then** stored items (TOTP seeds, recovery codes) are readable.
+1. **Given** Authentik is down (pods not running), **When** the admin navigates to `https://vault.fleet1.lan`, **Then** the Vaultwarden login page loads and credentials are accessible. ✅ Verified 2026-05-22 — no Authentik middleware on IngressRoute; `tls: {}` (no device-mTLS); login page loads independently.
+2. **Given** a valid master password, **When** the admin logs into Vaultwarden, **Then** stored items (TOTP seeds, recovery codes) are readable. ✅ Verified 2026-05-22 — items confirmed present after pod restart.
 
 ---
 
