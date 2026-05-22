@@ -43,5 +43,5 @@ worker:
       labels:
         release: prometheus
 
-ingress:
-  enabled: false
+# ingress: key removed — deprecated in 2026.5.0 (triggers template error if present)
+# Routing handled by Traefik IngressRoute in manifests/authentik/prereqs/ingress-route.yaml
