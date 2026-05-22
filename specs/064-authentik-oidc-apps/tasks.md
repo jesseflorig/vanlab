@@ -26,11 +26,11 @@
 
 ⚠️ **CRITICAL**: No OIDC login for any app will work until the `groups` scope mapping is in place and `akadmin` is in the `admins` group.
 
-- [ ] T003 Create `admins` group in Authentik: Admin UI → **Directory** → **Groups** → **Create** → Name: `admins` → Save
-- [ ] T004 [P] Create `users` group in Authentik: Admin UI → **Directory** → **Groups** → **Create** → Name: `users` → Save
-- [ ] T005 Add `akadmin` to `admins` group: Admin UI → **Directory** → **Users** → click `akadmin` → **Groups** tab → **Add** → select `admins` → Save
-- [ ] T006 Create `groups-claim` Scope Mapping: Admin UI → **Customization** → **Property Mappings** → **Create** → **Scope Mapping** → Name: `groups-claim`, Scope name: `groups`, Expression: `return {"groups": [group.name for group in request.user.ak_groups.all()]}` → Save
-- [ ] T007 Verify groups claim is working: navigate to `https://authentik.fleet1.lan/application/o/userinfo/` while logged in as `akadmin` — confirm response JSON contains `"groups": ["admins"]`
+- [X] T003 Create `admins` group in Authentik: Admin UI → **Directory** → **Groups** → **Create** → Name: `admins` → Save
+- [X] T004 [P] Create `users` group in Authentik: Admin UI → **Directory** → **Groups** → **Create** → Name: `users` → Save
+- [X] T005 Add `akadmin` to `admins` group: Admin UI → **Directory** → **Users** → click `akadmin` → **Groups** tab → **Add** → select `admins` → Save
+- [X] T006 Create `groups-claim` Scope Mapping: Admin UI → **Customization** → **Property Mappings** → **Create** → **Scope Mapping** → Name: `groups-claim`, Scope name: `groups`, Expression: `return {"groups": [group.name for group in request.user.ak_groups.all()]}` → Save
+- [X] T007 Verify groups claim is working: navigate to `https://authentik.fleet1.lan/application/o/userinfo/` while logged in as `akadmin` — confirm response JSON contains `"groups": ["admins"]`
 
 **Checkpoint**: `akadmin` is in `admins` group; groups-claim scope mapping exists; userinfo endpoint returns groups array.
 
@@ -42,12 +42,12 @@
 
 **Independent Test**: Navigate to `https://grafana.fleet1.lan` → click **Sign in with Authentik** → log in as `akadmin` → confirm Grafana dashboard loads with **Admin** role badge. Then log out and confirm `admin` native login still works at `/login`.
 
-- [ ] T008 [P] Create Grafana OIDC provider in Authentik: Admin UI → **Applications** → **Providers** → **Create** → **OAuth2/OIDC** → Name: `grafana`, Client type: Confidential, Client ID: `grafana`, Client Secret: (value of `grafana_oidc_client_secret`), Redirect URIs: `https://grafana.fleet1.lan/login/generic_oauth` and `https://grafana.fleet1.cloud/login/generic_oauth`, Scope Mappings: add `groups-claim` (keep default openid/profile/email) → Save
-- [ ] T009 [US1] Create Grafana Application in Authentik: Admin UI → **Applications** → **Applications** → **Create** → Name: `Grafana`, Slug: `grafana`, Provider: `grafana` → Save
+- [X] T008 [P] Create Grafana OIDC provider in Authentik: Admin UI → **Applications** → **Providers** → **Create** → **OAuth2/OIDC** → Name: `grafana`, Client type: Confidential, Client ID: `grafana`, Client Secret: (value of `grafana_oidc_client_secret`), Redirect URIs: `https://grafana.fleet1.lan/login/generic_oauth` and `https://grafana.fleet1.cloud/login/generic_oauth`, Scope Mappings: add `groups-claim` (keep default openid/profile/email) → Save
+- [X] T009 [US1] Create Grafana Application in Authentik: Admin UI → **Applications** → **Applications** → **Create** → Name: `Grafana`, Slug: `grafana`, Provider: `grafana` → Save
 - [X] T010 [P] [US1] Add `auth.generic_oauth` OIDC section to `roles/kube-prometheus-stack/templates/values.yaml.j2` under the `grafana:` key — add `grafana.ini.auth.generic_oauth` block with `enabled: true`, `name: Authentik`, `allow_sign_up: true`, `scopes: openid profile email groups`, `auth_url`, `token_url`, `api_url` pointing to `authentik.fleet1.lan`, `client_id: "{{ grafana_oidc_client_id }}"`, `client_secret: "{{ grafana_oidc_client_secret }}"`, `role_attribute_path: "contains(groups[*], 'admins') && 'Admin' || 'Viewer'"`, `role_attribute_strict: false`, `allow_assign_grafana_admin: true`
-- [ ] T011 [US1] Re-run kube-prometheus-stack Ansible role to apply Grafana OIDC config: `ansible-playbook -i hosts.ini playbooks/cluster/services-deploy.yml --tags kube-prometheus-stack -e "ansible_ssh_common_args='-o StrictHostKeyChecking=no'"` — wait for Grafana deployment rollout
-- [ ] T012 [US1] Verify Grafana OIDC login: navigate to `https://grafana.fleet1.lan` → click **Sign in with Authentik** → complete OIDC flow as `akadmin` → confirm landing in Grafana with role **Admin** (visible in user profile or **Administration** → **Users**)
-- [ ] T013 [US1] Verify Grafana native admin break-glass still works: navigate to `https://grafana.fleet1.lan/login` → log in as `admin` with native password → confirm dashboard loads
+- [X] T011 [US1] Re-run kube-prometheus-stack Ansible role to apply Grafana OIDC config: `ansible-playbook -i hosts.ini playbooks/cluster/services-deploy.yml --tags kube-prometheus-stack -e "ansible_ssh_common_args='-o StrictHostKeyChecking=no'"` — wait for Grafana deployment rollout
+- [X] T012 [US1] Verify Grafana OIDC login: navigate to `https://grafana.fleet1.lan` → click **Sign in with Authentik** → complete OIDC flow as `akadmin` → confirm landing in Grafana with role **Admin** (visible in user profile or **Administration** → **Users**)
+- [X] T013 [US1] Verify Grafana native admin break-glass still works: navigate to `https://grafana.fleet1.lan/login` → log in as `admin` with native password → confirm dashboard loads
 - [ ] T014 [US1] Commit Grafana OIDC changes to branch `064-authentik-oidc-apps`, PR to `main`, merge: files changed are `roles/kube-prometheus-stack/templates/values.yaml.j2` and `group_vars/example.all.yml` (T001/T002 additions if not yet committed)
 
 **Checkpoint**: Grafana OIDC login works; akadmin is Admin; native admin still valid.

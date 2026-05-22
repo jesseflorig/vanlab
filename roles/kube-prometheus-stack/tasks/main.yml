@@ -44,7 +44,6 @@
       --namespace {{ monitoring_namespace }}
       --version {{ prometheus_stack_chart_version }}
       --values /tmp/prometheus-stack-values.yaml
-      --atomic
       --timeout 10m
   environment:
     KUBECONFIG: /etc/rancher/k3s/k3s.yaml
