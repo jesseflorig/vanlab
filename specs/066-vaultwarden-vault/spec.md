@@ -2,7 +2,7 @@
 
 **Feature Branch**: `066-vaultwarden-vault`
 **Created**: 2026-05-22
-**Status**: Draft
+**Status**: Deployed
 **Input**: User description: "Deploy Vaultwarden as the cluster's out-of-band password manager and secrets vault. Vaultwarden must NOT be behind Authentik — it's the recovery toolchain for MFA seeds, recovery codes, and break-glass credentials. It needs to be accessible even if Authentik is down. Single-user (admin only). Exposed on fleet1.lan via Traefik + the existing wildcard cert. Persistent storage via Longhorn. ArgoCD-managed. Sealed Secret for admin token. This is spec 066."
 
 ---
