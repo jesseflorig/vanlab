@@ -1,0 +1,30 @@
+## Vaultwarden Helm values — guerzon/vaultwarden chart (0.36.4)
+## No secret values in this file — admin token comes from the vaultwarden-admin-token SealedSecret.
+##
+## BEFORE FIRST DEPLOY: verify these keys against the pinned chart version's values.yaml.
+## Run: helm show values vaultwarden/vaultwarden --version 0.36.4
+## Key discovery note: storage.data.class (not storageClass), confirmed from chart source.
+
+## Image — pinned to 1.36.0 (Docker Hub multi-arch, arm64 confirmed).
+image:
+  tag: "1.36.0"
+
+## Signups — set true only during initial admin account bootstrap, then set back to false.
+## See tasks.md T018/T019 for the bootstrap sequence.
+signupsAllowed: true
+
+## Admin token — injected from SealedSecret; never set inline.
+adminToken:
+  existingSecret: vaultwarden-admin-token
+  existingSecretKey: admin-token
+
+## Persistent storage — Longhorn-backed PVC per Constitution Principle VIII.
+storage:
+  data:
+    name: vaultwarden-data
+    size: 1Gi
+    class: longhorn
+
+## Ingress — disabled; Traefik IngressRoute in prereqs/ handles exposure.
+ingress:
+  enabled: false

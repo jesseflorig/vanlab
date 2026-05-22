@@ -69,6 +69,7 @@
       - hostname: node-red
       - hostname: prometheus
       - hostname: traefik
+      - hostname: vault
     # NVR firewall rules — idempotency key is the description field
     nvr_rules:
       - seq: 200
