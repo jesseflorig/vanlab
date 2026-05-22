@@ -37,6 +37,8 @@ Auto-generated from all feature plans. Last updated: 2026-05-22
 - No new PVCs — configuring backup of existing PVCs to MinIO (`longhorn-backups` bucket) (061-longhorn-backup-target)
 - YAML (Kubernetes manifests + Helm values) + guerzon/vaultwarden Helm chart (version pinned at plan time — see research.md), Traefik v3 (existing), cert-manager wildcard cert (spec 054, existing), Longhorn v1.11.1 (existing), Sealed Secrets controller (existing), ArgoCD (existing) (066-vaultwarden-vault)
 - Longhorn PVC, 1Gi, `storageClassName: longhorn` (066-vaultwarden-vault)
+- YAML (Kubernetes manifests + Helm values) + goauthentik/authentik Helm chart v2026.5.0; bitnami/postgresql (bundled subchart); bitnami/valkey (bundled subchart); Traefik v3 (existing); cert-manager wildcard cert (spec 054, existing); Longhorn v1.11.1 (existing); Sealed Secrets controller (existing); ArgoCD (existing) (063-authentik-idp)
+- Longhorn PVC `data-authentik-postgresql-0` (10Gi, Tier A backup); Longhorn PVC for Valkey master (1Gi, no backup — cache only) (063-authentik-idp)
 
 - YAML (Ansible 2.x) — follows existing project conventions + `smartmontools` (apt) — installed idempotently by the playbook as a (001-node-disk-health)
 
@@ -56,9 +58,9 @@ tests/
 YAML (Ansible 2.x) — follows existing project conventions: Follow standard conventions
 
 ## Recent Changes
+- 063-authentik-idp: Added YAML (Kubernetes manifests + Helm values) + goauthentik/authentik Helm chart v2026.5.0; bitnami/postgresql (bundled subchart); bitnami/valkey (bundled subchart); Traefik v3 (existing); cert-manager wildcard cert (spec 054, existing); Longhorn v1.11.1 (existing); Sealed Secrets controller (existing); ArgoCD (existing)
 - 066-vaultwarden-vault: Added YAML (Kubernetes manifests + Helm values) + guerzon/vaultwarden Helm chart (version pinned at plan time — see research.md), Traefik v3 (existing), cert-manager wildcard cert (spec 054, existing), Longhorn v1.11.1 (existing), Sealed Secrets controller (existing), ArgoCD (existing)
 - 061-longhorn-backup-target: Added YAML (Ansible 2.x + Kubernetes manifests, Longhorn CRDs `longhorn.io/v1beta2`) + Longhorn v1.11.1, ArgoCD, Sealed Secrets controller, kube-prometheus-stack (PrometheusRule CRD)
-- 060-minio-object-store: Added YAML (Ansible 2.x for inventory + utility playbooks; Kubernetes manifests; Helm values v3) + ArgoCD (already deployed, spec 005), Sealed Secrets controller (already deployed, per Principle XI infra list), Longhorn v1.11.1 (spec 006), Traefik v3 (existing), cert-manager + fleet1.lan wildcard cert (spec 054), MinIO `minio/minio` Helm chart (community)
 
 
 <!-- MANUAL ADDITIONS START -->

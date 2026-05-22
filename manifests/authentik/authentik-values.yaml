@@ -1,0 +1,47 @@
+---
+# Authentik Helm values — goauthentik/authentik chart v2026.5.0
+#
+# Key decisions (see specs/063-authentik-idp/research.md for full rationale):
+#   - authentik.existingSecret.secretName: secrets are injected via envFrom (not inline values)
+#   - postgresql.auth.existingSecret: same SealedSecret serves both consumers
+#   - No Redis/Valkey: Authentik 2026.5.x uses django-postgres-cache (PostgreSQL-backed)
+#   - ingress.enabled: false — Traefik IngressRoute in prereqs/ handles routing
+#
+# Secret values are NEVER stored here — all secrets via SealedSecret `authentik-secrets`.
+
+authentik:
+  existingSecret:
+    secretName: authentik-secrets
+
+postgresql:
+  enabled: true
+  auth:
+    existingSecret: authentik-secrets
+    username: authentik
+    database: authentik
+  primary:
+    persistence:
+      enabled: true
+      storageClass: longhorn
+      size: 10Gi
+
+server:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      interval: 30s
+      labels:
+        release: prometheus
+
+worker:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      interval: 30s
+      labels:
+        release: prometheus
+
+ingress:
+  enabled: false

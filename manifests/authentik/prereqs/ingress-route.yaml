@@ -1,0 +1,22 @@
+---
+# Traefik IngressRoute: authentik.fleet1.lan — Authentik SSO identity provider.
+# Standard TLS via TLSStore (SNI-selected wildcard cert) — NO device-mTLS.
+# Authentik IS the identity provider; placing it behind its own auth middleware
+# creates a circular dependency (same reasoning as Vaultwarden, spec 066).
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: authentik
+  namespace: authentik
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  entryPoints:
+    - websecure
+  tls: {}
+  routes:
+    - match: Host(`authentik.fleet1.lan`)
+      kind: Rule
+      services:
+        - name: authentik-server
+          port: 80

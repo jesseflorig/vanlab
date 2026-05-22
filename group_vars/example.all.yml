@@ -236,3 +236,11 @@ wireguard_client_public_key: <CLIENT_PUBLIC_KEY>
 # ── Vaultwarden Password Vault (066-vaultwarden-vault) ───────────────────────
 # Generate with: openssl rand -hex 32
 vaultwarden_admin_token: CHANGEME
+
+# ── Authentik SSO Identity Provider (063-authentik-idp) ──────────────────────
+# Generate with: openssl rand -base64 60 | tr -d '\n'
+authentik_secret_key: CHANGEME
+# Generate with: openssl rand -hex 24
+authentik_db_password: CHANGEME
+# Generate with: openssl rand -hex 24
+authentik_db_superuser_password: CHANGEME
