@@ -24,6 +24,7 @@ storage:
     name: vaultwarden-data
     size: 1Gi
     class: longhorn
+    accessMode: ReadWriteOnce
 
 ## Ingress — disabled; Traefik IngressRoute in prereqs/ handles exposure.
 ingress:
