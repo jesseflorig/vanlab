@@ -34,7 +34,7 @@
         - { name: gitea-shared-storage, namespace: gitea }
         - { name: mosquitto-data,       namespace: home-automation }
         - { name: frigate-clips,        namespace: frigate }
-        - { name: vaultwarden-data,     namespace: vaultwarden }
+        - { name: vaultwarden-data-vaultwarden-0, namespace: vaultwarden }
       register: label_tier_a_named
       changed_when: "'labeled' in label_tier_a_named.stdout or 'already' not in label_tier_a_named.stdout"
 
@@ -162,7 +162,7 @@
         msg:
           - "Tier A labels applied:"
           - "  gitea-shared-storage (gitea)"
-          - "  vaultwarden-data (vaultwarden)"
+          - "  vaultwarden-data-vaultwarden-0 (vaultwarden)"
           - "  {{ loki_pvc_name.stdout }} (monitoring)"
           - "  {{ ha_pvc_name.stdout }} (home-automation)"
           - "  {{ nodered_pvc_name.stdout }} (home-automation)"
