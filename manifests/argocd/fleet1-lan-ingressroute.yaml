@@ -1,8 +1,10 @@
 ---
-# Traefik IngressRoute: argocd.fleet1.lan with mTLS device certificate enforcement.
+# Traefik IngressRoute: argocd.fleet1.lan
 # ArgoCD server uses HTTPS internally; passthrough annotation tells Traefik to use HTTPS
 # to the backend with skip-verify transport (same as the fleet1.cloud Helm Ingress route).
 # TLS cert is provided by the fleet1-lan-wildcard-tls TLSStore (SNI-selected).
+# TODO: add mTLS enforcement once device-mtls TLSOption + device-ca-public secret
+# are mirrored into the argocd namespace (per frigate pattern).
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
@@ -14,10 +16,7 @@ metadata:
 spec:
   entryPoints:
     - websecure
-  tls:
-    options:
-      name: device-mtls
-      namespace: traefik
+  tls: {}
   routes:
     - match: Host(`argocd.fleet1.lan`)
       kind: Rule
