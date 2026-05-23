@@ -1,7 +1,8 @@
 ---
-# Traefik IngressRoute: gitea.fleet1.lan with mTLS device certificate enforcement.
-# TLS cert is provided by the fleet1-lan-wildcard-tls TLSStore (SNI-selected).
-# Requires the management laptop's device client cert to be installed.
+# Traefik IngressRoute: gitea.fleet1.lan
+# TLS cert provided by fleet1-lan-wildcard-tls TLSStore (SNI-selected).
+# TODO: add mTLS enforcement once device-mtls TLSOption + device-ca-public secret
+# are mirrored into the gitea namespace (per frigate pattern).
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
@@ -10,10 +11,7 @@ metadata:
 spec:
   entryPoints:
     - websecure
-  tls:
-    options:
-      name: device-mtls
-      namespace: traefik
+  tls: {}
   routes:
     - match: Host(`gitea.fleet1.lan`)
       kind: Rule

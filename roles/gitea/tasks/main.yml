@@ -24,6 +24,24 @@
   changed_when: false
   run_once: true
 
+- name: Scale Gitea to 0 before upgrade (avoids RWO PVC deadlock)
+  ansible.builtin.command: >
+    kubectl scale deployment/gitea -n {{ gitea_namespace }} --replicas=0
+  environment:
+    KUBECONFIG: /etc/rancher/k3s/k3s.yaml
+  changed_when: true
+  run_once: true
+
+- name: Wait for Gitea pod to terminate
+  ansible.builtin.command: >
+    kubectl wait --for=delete pod -l app.kubernetes.io/name=gitea
+    -n {{ gitea_namespace }} --timeout=120s
+  environment:
+    KUBECONFIG: /etc/rancher/k3s/k3s.yaml
+  changed_when: false
+  failed_when: false
+  run_once: true
+
 - name: Render Gitea Helm values template
   ansible.builtin.template:
     src: values.yaml.j2
@@ -37,7 +55,6 @@
     --namespace {{ gitea_namespace }}
     --version {{ gitea_version }}
     --values /tmp/gitea-values.yaml
-    --atomic
     --timeout 5m
   environment:
     KUBECONFIG: /etc/rancher/k3s/k3s.yaml
@@ -53,6 +70,35 @@
   environment:
     KUBECONFIG: /etc/rancher/k3s/k3s.yaml
   changed_when: false
+  run_once: true
+
+- name: Check if Authentik OAuth source already exists in Gitea
+  ansible.builtin.shell: |
+    kubectl exec -n {{ gitea_namespace }} deployment/gitea -- \
+      gitea admin auth list 2>/dev/null | grep -q 'authentik'
+  environment:
+    KUBECONFIG: /etc/rancher/k3s/k3s.yaml
+  register: gitea_oauth_exists
+  changed_when: false
+  failed_when: false
+  run_once: true
+
+- name: Add Authentik OIDC OAuth source to Gitea via exec
+  ansible.builtin.shell: |
+    kubectl exec -n {{ gitea_namespace }} deployment/gitea -- \
+      gitea admin auth add-oauth \
+        --name authentik \
+        --provider openidConnect \
+        --key "{{ gitea_oidc_client_id }}" \
+        --secret "{{ gitea_oidc_client_secret }}" \
+        --auto-discover-url "https://authentik.fleet1.lan/application/o/gitea/.well-known/openid-configuration" \
+        --scopes "openid profile email groups" \
+        --group-claim-name groups \
+        --admin-group admins
+  environment:
+    KUBECONFIG: /etc/rancher/k3s/k3s.yaml
+  when: gitea_oauth_exists.rc != 0
+  changed_when: true
   run_once: true
 
 - name: Verify Gitea PVC is Bound
