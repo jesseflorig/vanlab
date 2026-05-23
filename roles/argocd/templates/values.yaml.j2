@@ -4,6 +4,7 @@ configs:
     extra:
       oidc.authentik.clientSecret: "{{ argocd_oidc_client_secret }}"
   cm:
+    url: https://argocd.fleet1.lan
     # Ingress resources never get a LoadBalancer IP with NodePort Traefik.
     # This custom health check marks all Ingress resources as Healthy immediately.
     resource.customizations.health.networking.k8s.io_Ingress: |
@@ -23,6 +24,36 @@ configs:
       requestedIDTokenClaims:
         groups:
           essential: true
+      rootCA: |
+        -----BEGIN CERTIFICATE-----
+        MIIE/TCCAuWgAwIBAgIRAOMHso8+JNMmfRzSHu/ws0EwDQYJKoZIhvcNAQELBQAw
+        GDEWMBQGA1UEAxMNZmxlZXQxLWxhbi1jYTAeFw0yNjA0MjgwNTEzMTRaFw0zNjA0
+        MjUwNTEzMTRaMBgxFjAUBgNVBAMTDWZsZWV0MS1sYW4tY2EwggIiMA0GCSqGSIb3
+        DQEBAQUAA4ICDwAwggIKAoICAQDEjmvm+rBd6MCRpJkFouvfb8t0fkVmE7R6Kbac
+        tpqW+EHWIvPYlG+OpVuYgYBEdR83JpDzXH8wcxYrC/qrJzjohDbEnTj0S9nlAUBc
+        Rgt9rv9cEPlDOH6dtcMrGydd5QfQPRR9MBP5bMOWPB8rvsTI2RitSJwh3DTFIsf1
+        B2wYWcZtzcshYnNWXG+jVZSNTkxQPRu3xsYaXrTyiAIAyQR7oDpOBkUpmW8DxaRx
+        5QewpBpGCWbtcXNesl7slykDPViyz/0tOpUHaWPUg5uMrcK9jBEkFfS5afYQHqxd
+        sMqFktPtwMZYsBjDeo9WdDVgbgyxLFf5wFn7L2XCfrqiqEMtwki9NlGm1HiHaiSZ
+        jaIWpHo6VilLKLLDnA8b0udnNxUoN185ZfVG1JgXqYf+s2QPAPDUWalf7FzKCjTi
+        BOiiAr5pNguGiHpZknKGic3gdNm4ECmEUKNKU//CdEhtsokTFK/zLwnb3pZsMHyf
+        cA9LMzEBMRbO0xvQ8o3l43F9LIk1Rx7LzR+Ib7rqjyt+cE94RFUoav2Cv8Ez8pMw
+        AibPyhH6awwjuBamqT/6xxOujSYkLPferKBQcA/2HC2HuRjr1eOSQ7G+Atx0pYK8
+        f5ja8I2h5UvKXcWsjv9nWaqkgm9g0KdtZY+StBbvn+w9RSDul0HtntU1WdVXZnei
+        n47t2QIDAQABo0IwQDAOBgNVHQ8BAf8EBAMCAqQwDwYDVR0TAQH/BAUwAwEB/zAd
+        BgNVHQ4EFgQU1bkTN0l35Z6Ucttds0mSSxjf4lEwDQYJKoZIhvcNAQELBQADggIB
+        ADhLH3wkc4j+gUo+5V51FIWwID0t9kZVT9v93ZdjcL80znQerqE4ZGoR9jrX1pdq
+        Udmus1uNRVgnnRL7BQZF3iWecj+jPyndNrGjbzt36LxxOGgxNagghnuEqXSnqjh0
+        UpQf0Se8MtT4qSiSN5Uo7WdP5/fJ+xzYxNmgJEm0jU9DwThbS3CaDdcnjBjw1suC
+        SxGbGB1d7bynKVHKAXEZZ0HdRo9iRWB2C+O/vMmTQVoWj7aJ/PgtqTprHygMC3Hh
+        AJQ+GhMGAD0SkxckrvhQOHkvUSfupto1rbSZzkcLrHvqiBwhB51TNeEX9Tf204by
+        oyLNJCdOuTsVxcqGVcs697uCJXhDwUZ+uh+MTx2d/iA5OP8dQ8eLs346eqvHu9M/
+        EJGMi0IB2zELpnkU3LZDiTKRHoAEzIK9hNHATJFGKSI0XUxpjwq4A8Q3Fgc2LqD2
+        ovUwsdKCK787vs6rvg1k5yuPOG1Z4ArHJHT1yLAYikawrlyjCjsp8nPaXF26Q7m3
+        Vumpvcbv1uoIa/l474odsF6sN4sjR1gSPk/VK4UICGbfueaH2eEPgnjEY7pUYPOE
+        4UeTW14IwK1OYNMnt8+mMhvglYb7Fr0JRcfOnaF5NIR9ZHKem9oKOiyYiBFb+ID8
+        uLC9zkM9Cbbo/nMRgO19h0yDYOsBqbwVH2NxvNgUUP1Y
+        -----END CERTIFICATE-----
   rbac:
     scopes: '[groups]'
     policy.csv: |

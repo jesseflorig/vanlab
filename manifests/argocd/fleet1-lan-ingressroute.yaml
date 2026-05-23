@@ -10,9 +10,6 @@ kind: IngressRoute
 metadata:
   name: argocd-fleet1-lan
   namespace: argocd
-  annotations:
-    traefik.ingress.kubernetes.io/service.serversscheme: https
-    traefik.ingress.kubernetes.io/service.serverstransport: argocd-skip-verify@kubernetescrd
 spec:
   entryPoints:
     - websecure
@@ -21,5 +18,7 @@ spec:
     - match: Host(`argocd.fleet1.lan`)
       kind: Rule
       services:
-        - name: argocd-server
+        - name: argo-cd-argocd-server
           port: 443
+          scheme: https
+          serversTransport: argocd-skip-verify
