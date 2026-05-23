@@ -2,7 +2,7 @@
 
 **Feature Branch**: `064-authentik-oidc-apps`
 **Created**: 2026-05-11
-**Status**: Stub — captured from design session, not ready to plan
+**Status**: Deployed — 2026-05-23
 **Input**: User description: "Wire Tier 1a apps (Grafana, Gitea, ArgoCD) as OIDC clients of Authentik. OIDC is added alongside existing native auth, not replacing it — the native admin login stays valid as Tier 0 break-glass."
 
 ---
