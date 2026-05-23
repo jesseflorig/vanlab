@@ -1,23 +1,34 @@
+extraVolumes:
+  - name: fleet1-lan-ca
+    configMap:
+      name: fleet1-lan-ca
+
+extraContainerVolumeMounts:
+  - name: fleet1-lan-ca
+    mountPath: /etc/ssl/fleet1-lan
+    readOnly: true
+
+extraInitVolumeMounts:
+  - name: fleet1-lan-ca
+    mountPath: /etc/ssl/fleet1-lan
+    readOnly: true
+
+deployment:
+  env:
+    - name: SSL_CERT_FILE
+      value: /etc/ssl/fleet1-lan/ca.crt
+
 gitea:
   admin:
     username: "{{ gitea_admin_username }}"
     password: "{{ gitea_admin_password }}"
     email: "{{ gitea_admin_email }}"
-  oauth:
-    - name: authentik
-      provider: openidConnect
-      key: "{{ gitea_oidc_client_id }}"
-      secret: "{{ gitea_oidc_client_secret }}"
-      autoDiscoverUrl: https://authentik.fleet1.lan/application/o/gitea/.well-known/openid-configuration
-      scopes: "openid profile email groups"
-      groupClaimName: groups
-      adminGroup: admins
   config:
     database:
       DB_TYPE: sqlite3
     server:
-      DOMAIN: "{{ gitea_hostname }}"
-      ROOT_URL: "https://{{ gitea_hostname }}"
+      DOMAIN: gitea.fleet1.lan
+      ROOT_URL: https://gitea.fleet1.lan
     oauth2_client:
       ENABLE_AUTO_REGISTRATION: true
       USERNAME: preferred_username
