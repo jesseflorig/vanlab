@@ -19,10 +19,9 @@ spec:
         - name: kube-prometheus-stack-grafana
           port: 80
 ---
-# Traefik IngressRoute: prometheus.fleet1.lan
-# TLS cert provided by fleet1-lan-wildcard-tls TLSStore (SNI-selected).
-# TODO: add mTLS enforcement once device-mtls TLSOption + device-ca-public secret
-# are mirrored into the monitoring namespace (per frigate pattern).
+# Traefik IngressRoute: prometheus.fleet1.lan (spec 065)
+# Split rules: scrape/API paths (priority 20, no auth) bypass forward-auth so
+# Prometheus can still scrape itself. Browser paths (priority 10) require login.
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
@@ -33,8 +32,18 @@ spec:
     - websecure
   tls: {}
   routes:
+    - match: Host(`prometheus.fleet1.lan`) && (PathPrefix(`/metrics`) || PathPrefix(`/api/v1/`))
+      kind: Rule
+      priority: 20
+      services:
+        - name: kube-prometheus-stack-prometheus
+          port: 9090
     - match: Host(`prometheus.fleet1.lan`)
       kind: Rule
+      priority: 10
+      middlewares:
+        - name: authentik-forward-auth
+          namespace: traefik
       services:
         - name: kube-prometheus-stack-prometheus
           port: 9090
