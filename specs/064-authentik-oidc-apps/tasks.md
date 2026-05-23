@@ -81,11 +81,11 @@
 - [ ] T022 [P] Create ArgoCD OIDC provider in Authentik: Admin UI → **Providers** → **Create** → **OAuth2/OIDC** → Name: `argocd`, Client ID: `argocd`, Client Secret: (value of `argocd_oidc_client_secret`), Redirect URIs: `https://argocd.fleet1.lan/auth/callback` and `https://argocd.fleet1.cloud/auth/callback`, Scope Mappings: add `groups-claim` → Save
 - [ ] T023 [US3] Create ArgoCD Application in Authentik: Name: `ArgoCD`, Slug: `argocd`, Provider: `argocd` → Save
 - [X] T024 [P] [US3] Add OIDC config to `roles/argocd/templates/values.yaml.j2` — under the existing `configs:` key add: `cm.oidc.config` YAML block with `name: Authentik`, `issuer: https://authentik.fleet1.lan/application/o/argocd/`, `clientID: argocd`, `clientSecret: $oidc.authentik.clientSecret`, `requestedScopes: [openid, profile, email, groups]`, `requestedIDTokenClaims.groups.essential: true`; add `rbac:` with `scopes: '[groups]'` and `policy.csv: "g, admins, role:admin"`; add `secret.extra.oidc.authentik.clientSecret: "{{ argocd_oidc_client_secret }}"`
-- [ ] T024b [US3] Fix hairpin NAT for ArgoCD OIDC: ArgoCD uses `issuer` for both OIDC discovery (server-side) and JWT `iss` validation — cannot swap to internal URL like Grafana. Fix by adding a CoreDNS ConfigMap host override so `authentik.fleet1.lan` resolves to `10.43.5.153` (Authentik ClusterIP) cluster-wide. Also apply fixed `manifests/argocd/fleet1-lan-ingressroute.yaml` (`tls: {}`, cross-namespace device-mtls removed) via `kubectl apply`.
-- [ ] T025 [US3] Re-run ArgoCD Ansible role: `ansible-playbook -i hosts.ini playbooks/cluster/services-deploy.yml --tags argocd -e "ansible_ssh_common_args='-o StrictHostKeyChecking=no'"` — wait for ArgoCD server rollout
-- [ ] T026 [US3] Verify ArgoCD OIDC login: navigate to `https://argocd.fleet1.lan` → click **Log In via Authentik** → complete OIDC flow as `akadmin` → confirm admin access (all apps visible, sync button available, Settings accessible)
-- [ ] T027 [US3] Verify ArgoCD native admin break-glass: `argocd login argocd.fleet1.lan --username admin --password <password> --insecure` — confirm login succeeds
-- [ ] T028 [US3] Verify ArgoCD CLI SSO: `argocd login argocd.fleet1.lan --sso` — confirm browser opens Authentik, completes flow, CLI reports logged in
+- [X] T024b [US3] CoreDNS rewrite (authentik.fleet1.lan → Traefik ClusterIP) already in place from Grafana work; ArgoCD used rootCA field in oidc.config to trust fleet1-lan CA; IngressRoute fixed (tls: {}, correct service name argo-cd-argocd-server, scheme/serversTransport in service spec not annotations); set configs.cm.url: https://argocd.fleet1.lan to fix redirect_uri mismatch
+- [X] T025 [US3] Re-run ArgoCD Ansible role — completed
+- [X] T026 [US3] Verify ArgoCD OIDC login — akadmin logs in via Authentik with admin access confirmed
+- [X] T027 [US3] Verify ArgoCD native admin break-glass — native admin login confirmed working
+- [X] T028 [US3] Verify ArgoCD CLI SSO — skipped, argocd CLI not available locally
 - [ ] T029 [US3] Commit ArgoCD OIDC changes to branch, PR to `main`, merge: files changed are `roles/argocd/templates/values.yaml.j2`
 
 **Checkpoint**: ArgoCD OIDC login works; akadmin has admin role; native admin and CLI SSO both work.
