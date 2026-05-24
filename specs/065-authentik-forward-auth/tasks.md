@@ -52,8 +52,8 @@ description: "Task list for spec 065 — Authentik forward-auth for Tier 1b apps
 - [X] T005 [US1] Split Prometheus IngressRoute in `manifests/monitoring/fleet1-lan-ingressroutes.yaml`: add rule `Host(\`prometheus.fleet1.lan\`) && (PathPrefix(\`/metrics\`) || PathPrefix(\`/api/v1/\`))` with priority=20 (no middleware) and change existing catch-all rule to priority=10 with `middlewares: [{name: authentik-forward-auth, namespace: traefik}]`
 - [X] T006 [US1] Apply: `kubectl apply -f manifests/monitoring/fleet1-lan-ingressroutes.yaml`
 - [X] T007 [US1] Verify PR 1 per quickstart.md: browser auth gate (redirect → Authentik login → Prometheus UI), scrape check (`curl -s https://prometheus.fleet1.lan/metrics | head -5` returns metrics, not redirect)
-- [ ] T008 [US1] Export Authentik blueprint via Authentik UI (System → Blueprints → Export) to `specs/065-authentik-forward-auth/blueprint-backup.yaml`
-- [ ] T009 [US1] Commit `manifests/traefik/forward-auth-middleware.yaml` + updated `manifests/monitoring/fleet1-lan-ingressroutes.yaml` + `specs/065-authentik-forward-auth/blueprint-backup.yaml`; open PR for PR 1
+- [X] T008 [US1] Export Authentik blueprint via Authentik UI (System → Blueprints → Export) to `specs/065-authentik-forward-auth/blueprint-backup.yaml`
+- [X] T009 [US1] Commit `manifests/traefik/forward-auth-middleware.yaml` + updated `manifests/monitoring/fleet1-lan-ingressroutes.yaml` + `specs/065-authentik-forward-auth/blueprint-backup.yaml`; open PR for PR 1
 
 **Checkpoint**: Prometheus requires Authentik login; Prometheus can still scrape itself on `/metrics` and `/api/v1/`
 
@@ -70,12 +70,12 @@ description: "Task list for spec 065 — Authentik forward-auth for Tier 1b apps
 
 ### Implementation for User Story 2
 
-- [ ] T010 [US2] Authentik UI: Create Proxy Provider — name=Alertmanager, external host=`https://alertmanager.fleet1.lan`; Application — slug=alertmanager
-- [ ] T011 [US2] Add Alertmanager IngressRoute to `manifests/monitoring/fleet1-lan-ingressroutes.yaml`: split rule `Host(\`alertmanager.fleet1.lan\`) && (PathPrefix(\`/metrics\`) || PathPrefix(\`/api/v2/\`))` priority=20 (no middleware) + catch-all `Host(\`alertmanager.fleet1.lan\`)` priority=10 with forward-auth middleware; service=kube-prometheus-stack-alertmanager port=9093
-- [ ] T012 [US2] Apply: `kubectl apply -f manifests/monitoring/fleet1-lan-ingressroutes.yaml`
-- [ ] T013 [US2] Verify PR 2 per quickstart.md: browser auth gate, scrape check (`curl -s https://alertmanager.fleet1.lan/metrics | head -5`), SSO reuse from Prometheus session
-- [ ] T014 [US2] Update `specs/065-authentik-forward-auth/blueprint-backup.yaml` (re-export from Authentik UI, now includes Prometheus + Alertmanager providers)
-- [ ] T015 [US2] Commit updated `manifests/monitoring/fleet1-lan-ingressroutes.yaml` + `blueprint-backup.yaml`; open PR for PR 2
+- [X] T010 [US2] Authentik UI: Create Proxy Provider — name=Alertmanager, external host=`https://alertmanager.fleet1.lan`; Application — slug=alertmanager
+- [X] T011 [US2] Add Alertmanager IngressRoute to `manifests/monitoring/fleet1-lan-ingressroutes.yaml`: split rule `Host(\`alertmanager.fleet1.lan\`) && (PathPrefix(\`/metrics\`) || PathPrefix(\`/api/v2/\`))` priority=20 (no middleware) + catch-all `Host(\`alertmanager.fleet1.lan\`)` priority=10 with forward-auth middleware; service=kube-prometheus-stack-alertmanager port=9093
+- [X] T012 [US2] Apply: `kubectl apply -f manifests/monitoring/fleet1-lan-ingressroutes.yaml`
+- [X] T013 [US2] Verify PR 2 per quickstart.md: browser auth gate, scrape check (`curl -s https://alertmanager.fleet1.lan/metrics | head -5`), SSO reuse from Prometheus session
+- [X] T014 [US2] Update `specs/065-authentik-forward-auth/blueprint-backup.yaml` (re-export from Authentik UI, now includes Prometheus + Alertmanager providers)
+- [X] T015 [US2] Commit updated `manifests/monitoring/fleet1-lan-ingressroutes.yaml` + `blueprint-backup.yaml`; open PR for PR 2
 
 **Checkpoint**: Alertmanager requires Authentik login; scrape paths open; SSO works across Prometheus + Alertmanager
 

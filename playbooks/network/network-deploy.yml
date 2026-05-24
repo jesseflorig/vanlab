@@ -67,6 +67,8 @@
       - hostname: minio
       - hostname: mqtt
       - hostname: node-red
+      - hostname: alertmanager
+      - hostname: loki
       - hostname: prometheus
       - hostname: traefik
       - hostname: vault
