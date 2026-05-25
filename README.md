@@ -10,14 +10,14 @@ Ansible automation for a homelab running a 6-node K3s cluster with edge compute,
 Internet
   │
   └── Cloudflare Tunnel ──────────────────────────────────────────┐
-                                                                   │
-Management Laptop                                                  │
+                                                                  │
+Management Laptop                                                 │
   ├── SSH → edge (10.1.10.10) ←── Tailscale ───────────────────── │
-  │     └── SSH ProxyJump → node{1-6} (10.1.20.{11-16})          │
+  │     └── SSH ProxyJump → node{1-6} (10.1.20.{11-16})           │
   │                       → nvr (10.1.10.11)                      │
-  │                                                                │
+  │                                                               │
   └── Browser → fleet1.cloud / fleet1.lan                         │
-                                                                   ▼
+                                                                  ▼
 OPNsense (10.1.1.1) ── VLANs ──── edge ──── Traefik (K3s) ── Services
                                    │              │
                               Cloudflared    Longhorn (PVCs)
