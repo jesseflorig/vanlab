@@ -2,7 +2,7 @@
 
 **Feature Branch**: `065-authentik-forward-auth`
 **Created**: 2026-05-11
-**Status**: Ready to plan
+**Status**: Deployed — 2026-05-25
 **Input**: User description: "Put apps without native auth (Prometheus, Alertmanager, Traefik dashboard, Frigate, Node-RED) behind Authentik forward-auth via Traefik middleware."
 
 ---

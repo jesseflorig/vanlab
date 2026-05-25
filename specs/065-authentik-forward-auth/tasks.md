@@ -136,13 +136,13 @@ description: "Task list for spec 065 — Authentik forward-auth for Tier 1b apps
 
 ### Implementation for User Story 5
 
-- [ ] T028 [US5] Authentik UI: Create Proxy Provider — name=Node-RED, external host=`https://node-red.fleet1.lan`; Application — slug=node-red
-- [ ] T029 [US5] Update `node-red-fleet1-lan` IngressRoute in `manifests/home-automation/fleet1-lan-ingressroutes.yaml`: change `tls: options: name: device-mtls / namespace: traefik` to `tls: {}` AND add `middlewares: [{name: authentik-forward-auth, namespace: traefik}]` to the route rule; leave `home-assistant-fleet1-lan` and `influxdb-fleet1-lan` unchanged (their broken TLSOption is out of scope)
-- [ ] T030 [US5] Apply: `kubectl apply -f manifests/home-automation/fleet1-lan-ingressroutes.yaml`
-- [ ] T031 [US5] Verify PR 5 per quickstart.md: browser auth gate, Node-RED editor loads, deploy a test flow to confirm WebSocket works, confirm `https://hass.fleet1.lan` and `https://influxdb.fleet1.lan` still load
-- [ ] T032 [US5] If editor loads but deploys fail (WebSocket broken): split IngressRoute — add second rule `Host(\`node-red.fleet1.lan\`) && (PathPrefix(\`/comms\`) || PathPrefix(\`/socket.io/\`))` with higher priority and no middleware
-- [ ] T033 [US5] Update `specs/065-authentik-forward-auth/blueprint-backup.yaml` (re-export — final state with all 5 apps)
-- [ ] T034 [US5] Commit updated `manifests/home-automation/fleet1-lan-ingressroutes.yaml` + `blueprint-backup.yaml`; open PR for PR 5
+- [X] T028 [US5] Authentik UI: Create Proxy Provider — name=Node-RED, external host=`https://node-red.fleet1.lan`; Application — slug=node-red
+- [X] T029 [US5] Update `node-red-fleet1-lan` IngressRoute in `manifests/home-automation/fleet1-lan-ingressroutes.yaml`: change `tls: options: name: device-mtls / namespace: traefik` to `tls: {}` AND add `middlewares: [{name: authentik-forward-auth, namespace: traefik}]` to the route rule; leave `home-assistant-fleet1-lan` and `influxdb-fleet1-lan` unchanged (their broken TLSOption is out of scope)
+- [X] T030 [US5] Apply: `kubectl apply -f manifests/home-automation/fleet1-lan-ingressroutes.yaml`
+- [X] T031 [US5] Verify PR 5 per quickstart.md: browser auth gate, Node-RED editor loads, deploy a test flow to confirm WebSocket works, confirm `https://hass.fleet1.lan` and `https://influxdb.fleet1.lan` still load
+- [X] T032 [US5] WebSocket split not needed — deploys worked through forward-auth without exemption
+- [X] T033 [US5] Update `specs/065-authentik-forward-auth/blueprint-backup.yaml` (re-export — final state with all 5 apps)
+- [X] T034 [US5] Commit updated `manifests/home-automation/fleet1-lan-ingressroutes.yaml` + `blueprint-backup.yaml`; open PR for PR 5
 
 **Checkpoint**: All 5 Tier 1b apps gated behind Authentik forward-auth; Node-RED WebSocket confirmed working
 
@@ -152,7 +152,7 @@ description: "Task list for spec 065 — Authentik forward-auth for Tier 1b apps
 
 **Purpose**: Finalize documentation and mark spec deployed
 
-- [ ] T035 Update `specs/065-authentik-forward-auth/spec.md` status to `Deployed — 2026-05-23` (or actual deploy date)
+- [X] T035 Update `specs/065-authentik-forward-auth/spec.md` status to `Deployed — 2026-05-25`
 
 ---
 
