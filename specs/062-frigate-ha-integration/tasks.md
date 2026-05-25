@@ -47,8 +47,8 @@ description: "Task list for Frigate Home Assistant integration implementation"
 
 - [x] T008 [US1] Add `frigate.yaml` package to `manifests/home-automation/prereqs/config-extra.yaml` with `frigate: host: http://10.1.10.11:5000`
 - [x] T009 [US1] Commit and push updated `config-extra.yaml` to Gitea for ArgoCD sync
-- [ ] T010 [US1] Finalize integration setup in HA UI (**Settings** → **Devices & Services** → **Add Integration** → **Frigate**)
-- [ ] T011 [US1] Verify camera entities (e.g., `camera.front_door`) are created and showing live streams
+- [x] T010 [US1] Finalize integration setup in HA UI (**Settings** → **Devices & Services** → **Add Integration** → **Frigate**)
+- [x] T011 [US1] Verify camera entities (e.g., `camera.front_door`) are created and showing live streams
 
 **Checkpoint**: At this point, camera feeds should be viewable in Home Assistant.
 
@@ -62,9 +62,9 @@ description: "Task list for Frigate Home Assistant integration implementation"
 
 ### Implementation for User Story 2
 
-- [ ] T012 [US2] Verify MQTT connectivity within the Frigate integration settings in HA
-- [ ] T013 [US2] Verify binary sensors (e.g., `binary_sensor.front_door_person_motion`) are created in HA
-- [ ] T014 [US2] Test event flow by simulating or triggering a detection and monitoring HA entity state
+- [x] T012 [US2] Verify MQTT connectivity within the Frigate integration settings in HA
+- [x] T013 [US2] Verify binary sensors (e.g., `binary_sensor.front_door_person_motion`) are created in HA
+- [x] T014 [US2] Test event flow by simulating or triggering a detection and monitoring HA entity state
 
 **Checkpoint**: Detection events should be flowing from Frigate to Home Assistant sensors.
 
@@ -78,8 +78,8 @@ description: "Task list for Frigate Home Assistant integration implementation"
 
 ### Implementation for User Story 3
 
-- [ ] T015 [US3] Verify "Frigate" entry appears in the Home Assistant **Media** browser
-- [ ] T016 [US3] Verify snapshots and clips are accessible and playable within the HA UI
+- [x] T015 [US3] Verify "Frigate" entry appears in the Home Assistant **Media** browser
+- [x] T016 [US3] Verify snapshots and clips are accessible and playable within the HA UI
 
 **Checkpoint**: All user stories should now be functional.
 
@@ -90,9 +90,9 @@ description: "Task list for Frigate Home Assistant integration implementation"
 **Purpose**: Improvements that affect multiple user stories
 
 - [x] T017 [P] Update `specs/062-frigate-ha-integration/quickstart.md` with any discovered installation nuances
-- [ ] T018 Run final validation of all success criteria defined in `spec.md`
-- [ ] T019 [P] Document any manual UI steps required in the project's permanent documentation if necessary
-- [ ] T020 Verify SC-004: Perform a rolling restart of the K3s cluster nodes and verify that the Home Assistant Frigate entities automatically return to a "Connected" state without manual intervention.
+- [x] T018 Run final validation of all success criteria defined in `spec.md`
+- [x] T019 [P] Document any manual UI steps required in the project's permanent documentation if necessary
+- [x] T020 Verify SC-004: Perform a rolling restart of the K3s cluster nodes and verify that the Home Assistant Frigate entities automatically return to a "Connected" state without manual intervention.
 
 ---
 
