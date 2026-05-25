@@ -91,12 +91,12 @@ description: "Task list for spec 065 — Authentik forward-auth for Tier 1b apps
 
 ### Implementation for User Story 3
 
-- [ ] T016 [US3] Authentik UI: Create Proxy Provider — name=Traefik Dashboard, external host=`https://traefik.fleet1.lan`; Application — slug=traefik-dashboard
-- [ ] T017 [US3] Add middlewares block to `ingressRoute.dashboard` in `roles/traefik/files/values.yaml`: add `middlewares: [{name: authentik-forward-auth, namespace: traefik}]` under `ingressRoute.dashboard`
-- [ ] T018 [US3] Redeploy Traefik: `ansible-playbook -i hosts.ini playbooks/cluster/services-deploy.yml --tags traefik` — verify Traefik pod restarts cleanly
-- [ ] T019 [US3] Verify PR 3 per quickstart.md: private window → `https://traefik.fleet1.lan` → redirect to Authentik login → dashboard loads after auth
-- [ ] T020 [US3] Update `specs/065-authentik-forward-auth/blueprint-backup.yaml` (re-export, now includes Prometheus + Alertmanager + Traefik dashboard)
-- [ ] T021 [US3] Commit updated `roles/traefik/files/values.yaml` + `blueprint-backup.yaml`; open PR for PR 3
+- [X] T016 [US3] Authentik UI: Create Proxy Provider — name=Traefik Dashboard, external host=`https://traefik.fleet1.lan`; Application — slug=traefik-dashboard
+- [X] T017 [US3] Add middlewares block to `ingressRoute.dashboard` in `roles/traefik/files/values.yaml`: add `middlewares: [{name: authentik-forward-auth, namespace: traefik}]` under `ingressRoute.dashboard`
+- [X] T018 [US3] Redeploy Traefik: patched IngressRoute directly (Ansible SSH unavailable); values.yaml updated for next Helm deploy
+- [X] T019 [US3] Verify PR 3 per quickstart.md: private window → `https://traefik.fleet1.lan` → redirect to Authentik login → dashboard loads after auth
+- [X] T020 [US3] Update `specs/065-authentik-forward-auth/blueprint-backup.yaml` (re-export, now includes Prometheus + Alertmanager + Traefik dashboard)
+- [X] T021 [US3] Commit updated `roles/traefik/files/values.yaml` + `blueprint-backup.yaml`; open PR for PR 3
 
 **Checkpoint**: Traefik dashboard requires Authentik login; all three monitoring+infra UIs now gated
 
