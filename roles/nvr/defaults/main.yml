@@ -30,5 +30,7 @@ nvr_frigate_port: 5000
 
 # MQTT broker hostname and topic/client identity
 nvr_mqtt_broker_host: "mqtt.fleet1.lan"
+nvr_mqtt_username: "frigate-nvr"
+nvr_mqtt_password: "passwordpassword"
 nvr_mqtt_topic_prefix: "frigate"
 nvr_mqtt_client_id: "frigate-nvr"

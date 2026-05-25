@@ -4,10 +4,12 @@
 mqtt:
   enabled: true
   host: "{{ nvr_mqtt_broker_host }}"
-  port: 8883
+  port: 30883
   tls_ca_certs: /config/certs/ca.crt
   tls_client_cert: /config/certs/frigate-client.crt
   tls_client_key: /config/certs/frigate-client.key
+  user: "{{ nvr_mqtt_username }}"
+  password: "{{ nvr_mqtt_password }}"
   topic_prefix: "{{ nvr_mqtt_topic_prefix }}"
   client_id: "{{ nvr_mqtt_client_id }}"
 
