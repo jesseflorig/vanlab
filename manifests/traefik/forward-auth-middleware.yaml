@@ -1,0 +1,25 @@
+---
+# Shared Authentik forward-auth Middleware for Tier 1b apps (spec 065).
+# Referenced cross-namespace from IngressRoutes in monitoring and home-automation.
+# forwardAuth URL must use in-cluster service (hairpin NAT — pods cannot reach
+# node IPs on port 443 from inside the cluster).
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: authentik-forward-auth
+  namespace: traefik
+spec:
+  forwardAuth:
+    address: http://authentik-server.authentik.svc.cluster.local/outpost.goauthentik.io/auth/traefik
+    trustForwardHeader: true
+    authResponseHeaders:
+      - X-authentik-username
+      - X-authentik-email
+      - X-authentik-groups
+      - X-authentik-uid
+      - X-authentik-jwt
+      - X-authentik-meta-jwks
+      - X-authentik-meta-outpost
+      - X-authentik-meta-provider
+      - X-authentik-meta-app
+      - X-authentik-meta-version

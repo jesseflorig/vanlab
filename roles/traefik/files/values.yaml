@@ -32,10 +32,14 @@ ingressRoute:
     entryPoints:
       - websecure
     matchRule: Host(`traefik.fleet1.cloud`) || Host(`traefik.fleet1.lan`)
+    middlewares:
+      - name: authentik-forward-auth
+        namespace: traefik
 
 providers:
   kubernetesCRD:
     enabled: true
+    allowCrossNamespace: true
   kubernetesIngress:
     enabled: true
 
