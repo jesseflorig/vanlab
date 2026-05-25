@@ -115,6 +115,26 @@
         destination_net: "10.1.40.0/24"
         destination_port: "554"
         description: "NVR Frigate → cameras RTSP"
+      - seq: 204
+        action: pass
+        interface: lan
+        direction: in
+        ipprotocol: inet
+        protocol: TCP
+        source_net: "10.1.1.0/24"
+        destination_net: "10.1.10.10"
+        destination_port: "22"
+        description: "LAN → edge SSH management access"
+      - seq: 205
+        action: pass
+        interface: lan
+        direction: in
+        ipprotocol: inet
+        protocol: TCP
+        source_net: "10.1.1.0/24"
+        destination_net: "10.1.10.11"
+        destination_port: "22"
+        description: "LAN → NVR SSH management access"
   module_defaults:
     group/oxlorg.opnsense.all:
       firewall: "{{ opnsense_firewall }}"
