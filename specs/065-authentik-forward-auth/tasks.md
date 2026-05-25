@@ -113,12 +113,12 @@ description: "Task list for spec 065 — Authentik forward-auth for Tier 1b apps
 
 ### Implementation for User Story 4
 
-- [ ] T022 [US4] Authentik UI: Create Proxy Provider — name=Loki, external host=`https://loki.fleet1.lan`; Application — slug=loki
-- [ ] T023 [US4] Add Loki IngressRoute to `manifests/monitoring/fleet1-lan-ingressroutes.yaml`: single rule `Host(\`loki.fleet1.lan\`)` with forward-auth middleware; service=loki port=3100 (no scrape exemption — Grafana uses in-cluster URL)
-- [ ] T024 [US4] Apply: `kubectl apply -f manifests/monitoring/fleet1-lan-ingressroutes.yaml`
-- [ ] T025 [US4] Verify PR 4 per quickstart.md: browser auth gate, Loki API root loads after login, confirm Grafana Loki panels still populate
-- [ ] T026 [US4] Update `specs/065-authentik-forward-auth/blueprint-backup.yaml` (re-export)
-- [ ] T027 [US4] Commit updated `manifests/monitoring/fleet1-lan-ingressroutes.yaml` + `blueprint-backup.yaml`; open PR for PR 4
+- [X] T022 [US4] Authentik UI: Create Proxy Provider — name=Loki, external host=`https://loki.fleet1.lan`; Application — slug=loki
+- [X] T023 [US4] Add Loki IngressRoute to `manifests/monitoring/fleet1-lan-ingressroutes.yaml`: single rule `Host(\`loki.fleet1.lan\`)` with forward-auth middleware; service=loki port=3100 (no scrape exemption — Grafana uses in-cluster URL)
+- [X] T024 [US4] Apply: `kubectl apply -f manifests/monitoring/fleet1-lan-ingressroutes.yaml`
+- [X] T025 [US4] Verify PR 4 per quickstart.md: browser auth gate, Loki API root loads after login, confirm Grafana Loki panels still populate
+- [X] T026 [US4] Update `specs/065-authentik-forward-auth/blueprint-backup.yaml` (re-export)
+- [X] T027 [US4] Commit updated `manifests/monitoring/fleet1-lan-ingressroutes.yaml` + `blueprint-backup.yaml`; open PR for PR 4
 
 **Checkpoint**: Loki UI gated; Grafana data source unaffected (in-cluster path bypasses IngressRoute)
 
