@@ -9,7 +9,7 @@
 # Interface map (discovered from API):
 #   opt1 = VLAN10_Mgmt  (10.1.10.x) — NVR host, management devices
 #   opt2 = VLAN20_Cluster (10.1.20.x) — K3s cluster nodes
-#   opt3 = VLAN30_IoT, opt4 = VLAN40_Camera, opt5 = VLAN50_Trusted
+#   opt3 = VLAN30_IoT, opt4 = VLAN40_Camera, opt5 = VLAN50_Trusted, opt6 = VLAN60_Guest
 #
 # Usage:
 #   ansible-playbook -i hosts.ini playbooks/network/network-deploy.yml --check
@@ -135,6 +135,79 @@
         destination_net: "10.1.10.11"
         destination_port: "22"
         description: "LAN → NVR SSH management access"
+    wifi_rules:
+      # VLAN50 — Trusted WiFi (fleet1 SSID, 10.1.50.0/24)
+      - seq: 300
+        action: pass
+        interface: opt5
+        direction: in
+        ipprotocol: inet
+        protocol: TCP/UDP
+        source_net: "10.1.50.0/24"
+        destination_net: "10.1.50.1"
+        destination_port: "53"
+        description: "vlan50-dns"
+      - seq: 301
+        action: pass
+        interface: opt5
+        direction: in
+        ipprotocol: inet
+        protocol: TCP
+        source_net: "10.1.50.0/24"
+        destination_net: "10.1.20.11"
+        destination_port: "30443"
+        description: "vlan50-traefik-https"
+      - seq: 302
+        action: pass
+        interface: opt5
+        direction: in
+        ipprotocol: inet
+        protocol: TCP
+        source_net: "10.1.50.0/24"
+        destination_net: "10.1.20.11"
+        destination_port: "30883"
+        description: "vlan50-traefik-mqtts"
+      - seq: 303
+        action: block
+        interface: opt5
+        direction: in
+        ipprotocol: inet
+        source_net: "10.1.50.0/24"
+        destination_net: "10.1.0.0/8"
+        description: "vlan50-block-internal"
+      - seq: 304
+        action: pass
+        interface: opt5
+        direction: in
+        ipprotocol: inet
+        source_net: "10.1.50.0/24"
+        description: "vlan50-internet"
+      # VLAN60 — Guest WiFi (fleet1-guest SSID, 10.1.60.0/24)
+      - seq: 310
+        action: pass
+        interface: opt6
+        direction: in
+        ipprotocol: inet
+        protocol: TCP/UDP
+        source_net: "10.1.60.0/24"
+        destination_net: "10.1.60.1"
+        destination_port: "53"
+        description: "vlan60-dns"
+      - seq: 311
+        action: block
+        interface: opt6
+        direction: in
+        ipprotocol: inet
+        source_net: "10.1.60.0/24"
+        destination_net: "10.1.0.0/8"
+        description: "vlan60-block-internal"
+      - seq: 312
+        action: pass
+        interface: opt6
+        direction: in
+        ipprotocol: inet
+        source_net: "10.1.60.0/24"
+        description: "vlan60-internet"
   module_defaults:
     group/oxlorg.opnsense.all:
       firewall: "{{ opnsense_firewall }}"
@@ -228,6 +301,40 @@
       register: rule_result
       changed_when: rule_result.json.result in ['saved', 'added']
       loop: "{{ nvr_rules }}"
+      loop_control:
+        label: "{{ item.description }}"
+
+    - name: Apply WiFi firewall rules
+      ansible.builtin.uri:
+        url: >-
+          {{ opnsense_api_base }}/firewall/filter/{{
+            'set_rule/' + rule_uuid_by_desc[item.description]
+            if item.description in rule_uuid_by_desc
+            else 'add_rule'
+          }}
+        method: POST
+        url_username: "{{ opnsense_api_key }}"
+        url_password: "{{ opnsense_api_secret }}"
+        force_basic_auth: true
+        validate_certs: "{{ opnsense_api_verify_ssl }}"
+        body_format: json
+        body:
+          rule:
+            sequence: "{{ item.seq }}"
+            action: "{{ item.action }}"
+            interface: "{{ item.interface }}"
+            direction: "{{ item.direction }}"
+            ipprotocol: "{{ item.ipprotocol }}"
+            protocol: "{{ item.protocol | default(omit) }}"
+            source_net: "{{ item.source_net }}"
+            destination_net: "{{ item.destination_net | default(omit) }}"
+            destination_port: "{{ item.destination_port | default(omit) }}"
+            description: "{{ item.description }}"
+        return_content: true
+        status_code: [200]
+      register: wifi_rule_result
+      changed_when: wifi_rule_result.json.result in ['saved', 'added']
+      loop: "{{ wifi_rules }}"
       loop_control:
         label: "{{ item.description }}"
 
@@ -685,6 +792,85 @@
       when: not fleet1_lan_mqtts_dnat_exists
       changed_when: mqtts_dnat_create_result.json.result | default('') == 'saved'
 
+    # ── VLAN50 DNAT: same rewrites for WiFi trusted clients ───────────────────
+    - name: Check if VLAN50 HTTPS DNAT rule already exists
+      ansible.builtin.set_fact:
+        vlan50_https_dnat_exists: >-
+          {{ existing_dnat_rules.json.rows
+             | selectattr('descr', 'equalto', 'vlan50 HTTPS → Traefik NodePort')
+             | list | length > 0 }}
+
+    - name: Create VLAN50 HTTPS → Traefik NodePort DNAT rule
+      ansible.builtin.uri:
+        url: "{{ opnsense_api_base }}/firewall/d_nat/addRule"
+        method: POST
+        url_username: "{{ opnsense_api_key }}"
+        url_password: "{{ opnsense_api_secret }}"
+        force_basic_auth: true
+        validate_certs: "{{ opnsense_api_verify_ssl }}"
+        body_format: json
+        body:
+          rule:
+            disabled: "0"
+            nordr: "0"
+            interface: opt5
+            ipprotocol: inet
+            protocol: tcp
+            destination:
+              network: ""
+              address: "10.1.20.11"
+              port: "443"
+              not: "0"
+            target: "10.1.20.11"
+            local-port: "30443"
+            descr: "vlan50 HTTPS → Traefik NodePort"
+            log: "0"
+            nosync: "0"
+        return_content: true
+        status_code: [200]
+      register: vlan50_https_dnat_result
+      when: not vlan50_https_dnat_exists
+      changed_when: vlan50_https_dnat_result.json.result | default('') == 'saved'
+
+    - name: Check if VLAN50 MQTTS DNAT rule already exists
+      ansible.builtin.set_fact:
+        vlan50_mqtts_dnat_exists: >-
+          {{ existing_dnat_rules.json.rows
+             | selectattr('descr', 'equalto', 'vlan50 MQTTS → Traefik NodePort')
+             | list | length > 0 }}
+
+    - name: Create VLAN50 MQTTS → Traefik NodePort DNAT rule
+      ansible.builtin.uri:
+        url: "{{ opnsense_api_base }}/firewall/d_nat/addRule"
+        method: POST
+        url_username: "{{ opnsense_api_key }}"
+        url_password: "{{ opnsense_api_secret }}"
+        force_basic_auth: true
+        validate_certs: "{{ opnsense_api_verify_ssl }}"
+        body_format: json
+        body:
+          rule:
+            disabled: "0"
+            nordr: "0"
+            interface: opt5
+            ipprotocol: inet
+            protocol: tcp
+            destination:
+              network: ""
+              address: "10.1.20.11"
+              port: "8883"
+              not: "0"
+            target: "10.1.20.11"
+            local-port: "30883"
+            descr: "vlan50 MQTTS → Traefik NodePort"
+            log: "0"
+            nosync: "0"
+        return_content: true
+        status_code: [200]
+      register: vlan50_mqtts_dnat_result
+      when: not vlan50_mqtts_dnat_exists
+      changed_when: vlan50_mqtts_dnat_result.json.result | default('') == 'saved'
+
     - name: Apply Destination NAT configuration
       ansible.builtin.uri:
         url: "{{ opnsense_api_base }}/firewall/d_nat/apply"
@@ -698,7 +884,9 @@
         return_content: true
         status_code: [200]
       register: dnat_apply_result
-      when: not fleet1_lan_dnat_exists or not fleet1_lan_mqtts_dnat_exists
+      when: >-
+        not fleet1_lan_dnat_exists or not fleet1_lan_mqtts_dnat_exists or
+        not vlan50_https_dnat_exists or not vlan50_mqtts_dnat_exists
       changed_when: dnat_apply_result.json.status | default('') == 'ok'
 
 

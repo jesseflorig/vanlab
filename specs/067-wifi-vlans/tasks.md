@@ -46,12 +46,12 @@
 
 **Independent Test**: Connect a device to "fleet1" SSID → confirm IP in 10.1.50.100-200 → confirm `https://grafana.fleet1.lan` loads → confirm `ping 10.1.20.11` is blocked
 
-- [ ] T007 [US1] Add VLAN50 DNS allow rule (seq 300: source=VLAN50 net, dest=10.1.50.1, port=53, proto=UDP+TCP, action=allow, desc=vlan50-dns) to playbooks/network/network-deploy.yml firewall rules section
-- [ ] T008 [US1] Add VLAN50 Traefik HTTPS allow rule (seq 301: source=VLAN50 net, dest=10.1.20.11, port=30443, proto=TCP, action=allow, desc=vlan50-traefik-https) to playbooks/network/network-deploy.yml
-- [ ] T009 [US1] Add VLAN50 Traefik MQTTS allow rule (seq 302: source=VLAN50 net, dest=10.1.20.11, port=30883, proto=TCP, action=allow, desc=vlan50-traefik-mqtts) to playbooks/network/network-deploy.yml
-- [ ] T010 [US1] Add VLAN50 internal block rule (seq 303: source=VLAN50 net, dest=10.1.0.0/8, action=block, desc=vlan50-block-internal) to playbooks/network/network-deploy.yml
-- [ ] T011 [US1] Add VLAN50 internet allow rule (seq 304: source=VLAN50 net, dest=any, action=allow, desc=vlan50-internet) to playbooks/network/network-deploy.yml
-- [ ] T012 [US1] Dry-run network-deploy.yml with `ansible-playbook -i hosts.ini playbooks/network/network-deploy.yml --check` to verify VLAN50 rules parse without errors
+- [X] T007 [US1] Add VLAN50 DNS allow rule (seq 300: source=VLAN50 net, dest=10.1.50.1, port=53, proto=UDP+TCP, action=allow, desc=vlan50-dns) to playbooks/network/network-deploy.yml firewall rules section
+- [X] T008 [US1] Add VLAN50 Traefik HTTPS allow rule (seq 301: source=VLAN50 net, dest=10.1.20.11, port=30443, proto=TCP, action=allow, desc=vlan50-traefik-https) to playbooks/network/network-deploy.yml
+- [X] T009 [US1] Add VLAN50 Traefik MQTTS allow rule (seq 302: source=VLAN50 net, dest=10.1.20.11, port=30883, proto=TCP, action=allow, desc=vlan50-traefik-mqtts) to playbooks/network/network-deploy.yml
+- [X] T010 [US1] Add VLAN50 internal block rule (seq 303: source=VLAN50 net, dest=10.1.0.0/8, action=block, desc=vlan50-block-internal) to playbooks/network/network-deploy.yml
+- [X] T011 [US1] Add VLAN50 internet allow rule (seq 304: source=VLAN50 net, dest=any, action=allow, desc=vlan50-internet) to playbooks/network/network-deploy.yml
+- [X] T012 [US1] Dry-run network-deploy.yml with `ansible-playbook -i hosts.ini playbooks/network/network-deploy.yml --check` to verify VLAN50 rules parse without errors
 
 **Checkpoint**: VLAN50 rules added and syntax-verified. After applying (Phase 6), trusted WiFi should be fully functional.
 
@@ -63,10 +63,10 @@
 
 **Independent Test**: Connect a device to "fleet1-guest" SSID → confirm IP in 10.1.60.100-200 → confirm `curl https://example.com` works → confirm `ping 10.1.1.1` is blocked
 
-- [ ] T013 [US2] Add VLAN60 DNS allow rule (seq 310: source=VLAN60 net, dest=10.1.60.1, port=53, proto=UDP+TCP, action=allow, desc=vlan60-dns) to playbooks/network/network-deploy.yml
-- [ ] T014 [US2] Add VLAN60 internal block rule (seq 311: source=VLAN60 net, dest=10.1.0.0/8, action=block, desc=vlan60-block-internal) to playbooks/network/network-deploy.yml
-- [ ] T015 [US2] Add VLAN60 internet allow rule (seq 312: source=VLAN60 net, dest=any, action=allow, desc=vlan60-internet) to playbooks/network/network-deploy.yml
-- [ ] T016 [US2] Dry-run network-deploy.yml with `ansible-playbook -i hosts.ini playbooks/network/network-deploy.yml --check` to verify VLAN60 rules parse without errors
+- [X] T013 [US2] Add VLAN60 DNS allow rule (seq 310: source=VLAN60 net, dest=10.1.60.1, port=53, proto=UDP+TCP, action=allow, desc=vlan60-dns) to playbooks/network/network-deploy.yml
+- [X] T014 [US2] Add VLAN60 internal block rule (seq 311: source=VLAN60 net, dest=10.1.0.0/8, action=block, desc=vlan60-block-internal) to playbooks/network/network-deploy.yml
+- [X] T015 [US2] Add VLAN60 internet allow rule (seq 312: source=VLAN60 net, dest=any, action=allow, desc=vlan60-internet) to playbooks/network/network-deploy.yml
+- [X] T016 [US2] Dry-run network-deploy.yml with `ansible-playbook -i hosts.ini playbooks/network/network-deploy.yml --check` to verify VLAN60 rules parse without errors
 
 **Checkpoint**: VLAN60 rules added and syntax-verified. After applying (Phase 6), guest WiFi should be fully isolated.
 
@@ -91,7 +91,7 @@
 
 **Purpose**: Apply changes to live OPNsense, run full verification, update documentation
 
-- [ ] T019 Apply network-deploy.yml to live OPNsense with `ansible-playbook -i hosts.ini playbooks/network/network-deploy.yml` (run after T001-T016 are complete)
+- [X] T019 Apply network-deploy.yml to live OPNsense with `ansible-playbook -i hosts.ini playbooks/network/network-deploy.yml` (run after T001-T016 are complete)
 - [ ] T020 Run full WiFi verification suite per specs/067-wifi-vlans/quickstart.md Step 6 (trusted WiFi access, guest isolation, AP management check)
 - [ ] T021 [P] Update docs/networking.md VLAN table to add VLAN50 (10.1.50.0/24, Trusted WiFi) and VLAN60 (10.1.60.0/24, Guest WiFi) rows
 
