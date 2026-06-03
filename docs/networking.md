@@ -69,3 +69,5 @@ Internal `.lan` services are served by Traefik using the `fleet1-lan-wildcard-tl
 | VLAN10 | 10.1.10.0/24 | Edge + NVR hosts |
 | VLAN20 | 10.1.20.0/24 | K3s cluster nodes |
 | VLAN40 | 10.1.40.0/24 | IoT cameras |
+| VLAN50 | 10.1.50.0/24 | Trusted WiFi (fleet1 SSID) |
+| VLAN60 | 10.1.60.0/24 | Guest WiFi (fleet1-guest SSID) |

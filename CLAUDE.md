@@ -1,6 +1,6 @@
 # vanlab Development Guidelines
 
-Auto-generated from all feature plans. Last updated: 2026-05-23
+Auto-generated from all feature plans. Last updated: 2026-05-26
 
 ## Active Technologies
 - YAML (Ansible 2.x) — existing project conventions (002-project-reorganization)
@@ -42,6 +42,8 @@ Auto-generated from all feature plans. Last updated: 2026-05-23
 - N/A — no new PVCs (064-authentik-oidc-apps)
 - YAML (Kubernetes manifests + Traefik CRDs) + Authentik embedded outpost (spec 063), Traefik v3 (existing), kube-prometheus-stack (existing), Loki (existing), Node-RED (existing, ArgoCD-managed) (065-authentik-forward-auth)
 - N/A — purely configuration; no new PVCs (065-authentik-forward-auth)
+- YAML (Ansible 2.x) — follows existing project conventions + `oxlorg.opnsense` REST API collection (already in use), OPNsense 26.1 (already deployed) (067-wifi-vlans)
+- N/A — no new PVCs; purely network configuration (067-wifi-vlans)
 
 - YAML (Ansible 2.x) — follows existing project conventions + `smartmontools` (apt) — installed idempotently by the playbook as a (001-node-disk-health)
 
@@ -61,9 +63,9 @@ tests/
 YAML (Ansible 2.x) — follows existing project conventions: Follow standard conventions
 
 ## Recent Changes
+- 067-wifi-vlans: Added YAML (Ansible 2.x) — follows existing project conventions + `oxlorg.opnsense` REST API collection (already in use), OPNsense 26.1 (already deployed)
 - 065-authentik-forward-auth: Added YAML (Kubernetes manifests + Traefik CRDs) + Authentik embedded outpost (spec 063), Traefik v3 (existing), kube-prometheus-stack (existing), Loki (existing), Node-RED (existing, ArgoCD-managed)
 - 064-authentik-oidc-apps: Added YAML (Ansible 2.x + Kubernetes manifests)
-- 063-authentik-idp: Added YAML (Kubernetes manifests + Helm values) + goauthentik/authentik Helm chart v2026.5.0; bitnami/postgresql (bundled subchart); bitnami/valkey (bundled subchart); Traefik v3 (existing); cert-manager wildcard cert (spec 054, existing); Longhorn v1.11.1 (existing); Sealed Secrets controller (existing); ArgoCD (existing)
 
 
 <!-- MANUAL ADDITIONS START -->
