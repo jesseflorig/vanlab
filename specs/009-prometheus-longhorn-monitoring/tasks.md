@@ -86,9 +86,9 @@
 ## Phase 6: Polish & Cross-Cutting Concerns
 
 - [X] T021 Run idempotency check: `ansible-playbook -i hosts.ini playbooks/cluster/services-deploy.yml --tags monitoring` — verify no failures and no unintended changes to running stack
-- [ ] T022 [P] Commit all new and modified files to `009-prometheus-longhorn-monitoring` branch
-- [ ] T023 [P] Push to both GitHub (`origin`) and Gitea (`gitea`) remotes
-- [ ] T024 Merge `009-prometheus-longhorn-monitoring` into `main`
+- [X] T022 [P] Commit all new and modified files to `009-prometheus-longhorn-monitoring` branch
+- [X] T023 [P] Push to both GitHub (`origin`) and Gitea (`gitea`) remotes
+- [X] T024 Merge `009-prometheus-longhorn-monitoring` into `main`
 
 ---
 

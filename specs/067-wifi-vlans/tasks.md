@@ -20,11 +20,11 @@
 
 **⚠️ CRITICAL**: All Phase 1 tasks must complete before Phase 3+ Ansible tasks can be verified against a live network.
 
-- [ ] T001 Create VLAN50 interface (opt5, 10.1.50.1/24) and VLAN60 interface (opt6, 10.1.60.1/24) on OPNsense via web UI per specs/067-wifi-vlans/quickstart.md Step 1
-- [ ] T002 Enable DHCP servers for VLAN50 (pool 10.1.50.100-200) and VLAN60 (pool 10.1.60.100-200) on OPNsense via web UI per specs/067-wifi-vlans/quickstart.md Step 2
-- [ ] T003 [P] Add VLAN50 and VLAN60 as tagged VLANs on GS308T uplink port (to/from GS308EPP) per specs/067-wifi-vlans/quickstart.md Step 3
-- [ ] T004 [P] Add VLAN50 and VLAN60 as tagged VLANs on GS308EPP uplink (to GS308T) and port 7 (WAX610); set port 7 native VLAN to LAN per specs/067-wifi-vlans/quickstart.md Step 3
-- [ ] T005 Reassign WAX610 management IP to 10.1.1.50, then create "fleet1" SSID (VLAN50, client isolation off) and "fleet1-guest" SSID (VLAN60, client isolation on) per specs/067-wifi-vlans/quickstart.md Step 4
+- [X] T001 Create VLAN50 interface (opt5, 10.1.50.1/24) and VLAN60 interface (opt6, 10.1.60.1/24) on OPNsense via web UI per specs/067-wifi-vlans/quickstart.md Step 1
+- [X] T002 Enable DHCP servers for VLAN50 (pool 10.1.50.100-200) and VLAN60 (pool 10.1.60.100-200) on OPNsense via web UI per specs/067-wifi-vlans/quickstart.md Step 2
+- [X] T003 [P] Add VLAN50 and VLAN60 as tagged VLANs on GS308T uplink port (to/from GS308EPP) per specs/067-wifi-vlans/quickstart.md Step 3
+- [X] T004 [P] Add VLAN50 and VLAN60 as tagged VLANs on GS308EPP uplink (to GS308T) and port 7 (WAX610); set port 7 native VLAN to LAN per specs/067-wifi-vlans/quickstart.md Step 3
+- [X] T005 Reassign WAX610 management IP to 10.1.1.50, then create "fleet1" SSID (VLAN50, client isolation off) and "fleet1-guest" SSID (VLAN60, client isolation on) per specs/067-wifi-vlans/quickstart.md Step 4
 
 **Checkpoint**: OPNsense VLAN interfaces are up with DHCP, switches trunk VLAN50/60, WAX610 broadcasts both SSIDs from 10.1.1.50
 
@@ -34,7 +34,7 @@
 
 **Purpose**: Read the existing network-deploy.yml to identify the correct insertion point for new firewall rules. This is a read-only step that informs all Phase 3+ tasks.
 
-- [ ] T006 Read playbooks/network/network-deploy.yml firewall rules section to confirm highest existing sequence number and identify the insertion point for VLAN50 (seq 300) and VLAN60 (seq 310) rules
+- [X] T006 Read playbooks/network/network-deploy.yml firewall rules section to confirm highest existing sequence number and identify the insertion point for VLAN50 (seq 300) and VLAN60 (seq 310) rules
 
 **Checkpoint**: Insertion point confirmed — VLAN50/60 rules can now be added without conflicts
 
@@ -80,8 +80,8 @@
 
 *Note: No new Ansible code required for this story — the VLAN50 seq 303 "block internal" rule (T010) and VLAN60 seq 311 "block internal" rule (T014) already prevent WiFi clients from reaching 10.1.1.50 on the LAN. AP management IP migration is covered by T005. This phase captures only the verification tasks.*
 
-- [ ] T017 [US3] Verify WAX610 management UI is accessible at http://10.1.1.50 from a wired LAN device (manual check after T005)
-- [ ] T018 [US3] Verify WAX610 management UI is NOT accessible from a device on "fleet1" SSID (manual check after Phase 6 apply)
+- [X] T017 [US3] Verify WAX610 management UI is accessible at http://10.1.1.50 from a wired LAN device (manual check after T005)
+- [X] T018 [US3] Verify WAX610 management UI is NOT accessible from a device on "fleet1" SSID (manual check after Phase 6 apply)
 
 **Checkpoint**: All three user stories are now implemented and verified independently.
 
@@ -92,8 +92,8 @@
 **Purpose**: Apply changes to live OPNsense, run full verification, update documentation
 
 - [X] T019 Apply network-deploy.yml to live OPNsense with `ansible-playbook -i hosts.ini playbooks/network/network-deploy.yml` (run after T001-T016 are complete)
-- [ ] T020 Run full WiFi verification suite per specs/067-wifi-vlans/quickstart.md Step 6 (trusted WiFi access, guest isolation, AP management check)
-- [ ] T021 [P] Update docs/networking.md VLAN table to add VLAN50 (10.1.50.0/24, Trusted WiFi) and VLAN60 (10.1.60.0/24, Guest WiFi) rows
+- [X] T020 Run full WiFi verification suite per specs/067-wifi-vlans/quickstart.md Step 6 (trusted WiFi access, guest isolation, AP management check)
+- [X] T021 [P] Update docs/networking.md VLAN table to add VLAN50 (10.1.50.0/24, Trusted WiFi) and VLAN60 (10.1.60.0/24, Guest WiFi) rows
 
 ---
 
