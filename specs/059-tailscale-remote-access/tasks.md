@@ -118,7 +118,7 @@
 
 - [X] T034 [US3] Audit `roles/tailscale/tasks/main.yml` for idempotency: verify every task uses a `changed_when` expression (not just `rc == 0`), verify `tailscale up` is gated on the enrollment check from T010, verify the `tailscale set --key-expiry-disabled` task has a guard that reads current expiry state and skips if already disabled (use `tailscale status --json | jq '.Self.KeyExpiry'` — disabled shows `"0001-01-01T00:00:00Z"`).
 - [X] T035 [US3] Audit `roles/device-mtls/tasks/main.yml` for idempotency: verify all `kubectl apply` commands use `--dry-run=client -o yaml | kubectl apply -f -` or equivalent; verify `kubectl wait` tasks use `changed_when: false`; verify temp file cleanup runs even if earlier tasks fail (use `always:` block for cleanup).
-- [ ] T036 [US3] Run `ansible-playbook -i hosts.ini playbooks/compute/tailscale-deploy.yml --check --ask-vault-pass` and confirm the playbook passes check mode without errors. Fix any tasks that fail `--check` mode (e.g., tasks that use `command` with output-dependent logic — add `check_mode: false` with appropriate guards).
+- [X] T036 [US3] Run `ansible-playbook -i hosts.ini playbooks/compute/tailscale-deploy.yml --check --ask-vault-pass` and confirm the playbook passes check mode without errors. Fix any tasks that fail `--check` mode (e.g., tasks that use `command` with output-dependent logic — add `check_mode: false` with appropriate guards).
 
 **Checkpoint**: Second run of tailscale-deploy.yml shows `changed=0`. US3 acceptance criteria met.
 
@@ -128,7 +128,7 @@
 
 - [X] T037 [P] Verify `group_vars/example.all.yml` contains ALL new variables introduced by this feature: `tailscale_auth_key` with placeholder value. Check for any device-mtls role variables that may need defaults documented. No variable in `group_vars/all.yml` should be undocumented in `example.all.yml`.
 - [X] T038 [P] Add a `# Tailscale` comment section and role description comment to `playbooks/cluster/device-mtls-deploy.yml` and `playbooks/compute/tailscale-deploy.yml` following the project convention (look at existing playbook comment headers).
-- [ ] T039 Run the full end-to-end verification from `specs/059-tailscale-remote-access/quickstart.md` Step 11 on a real external network. Confirm: (a) subnet ping to `10.1.1.1` works, (b) `fleet1.lan` DNS resolves, (c) `curl` without cert is rejected, (d) `curl` with cert succeeds, (e) browser opens `https://gitea.fleet1.lan` with cert prompt and loads page.
+- [X] T039 Run the full end-to-end verification from `specs/059-tailscale-remote-access/quickstart.md` Step 11 on a real external network. Confirm: (a) subnet ping to `10.1.1.1` works, (b) `fleet1.lan` DNS resolves, (c) `curl` without cert is rejected, (d) `curl` with cert succeeds, (e) browser opens `https://gitea.fleet1.lan` with cert prompt and loads page.
 - [X] T040 Update `specs/059-tailscale-remote-access/spec.md` status from `Draft` to `Implemented`.
 
 ---

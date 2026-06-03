@@ -107,9 +107,9 @@
 
 - [X] T022 Add `tags` to each play in `playbooks/utilities/nvme-migrate.yml` (`nvme-prep`, `longhorn-register`, `longhorn-evict`, `longhorn-cleanup`) so individual phases can be re-run in isolation
 - [X] T023 Add Play 5 (eMMC data cleanup) to `playbooks/utilities/nvme-migrate.yml`: `hosts: cluster`, `become: true` — for each node, assert `/mnt/nvme/longhorn-disk.cfg` exists (confirms NVMe is active Longhorn disk), then remove `/var/lib/longhorn/replicas/` with `ansible.builtin.file: path=/var/lib/longhorn/replicas state=absent` and remove `/var/lib/longhorn/longhorn-disk.cfg` with `ansible.builtin.file: state=absent`; leave `/var/lib/longhorn/` directory intact
-- [ ] T024 [P] Run `ansible-playbook -i hosts.ini playbooks/utilities/disk-health.yml` — all 6 nodes must show NVMe `PRESENT` and the new mount visible in the report
-- [ ] T025 [P] Run `ansible-playbook -i hosts.ini playbooks/cluster/longhorn-smoke-test.yml` — PVC must be provisioned, data written, pod deleted and recreated, data verified persistent; confirms NVMe-backed Longhorn is fully functional
-- [ ] T026 Verify Longhorn UI storage summary shows ~10TB usable (6 × 1.7TB ÷ 2 replicas) replacing the previous ~168GB from eMMC
+- [X] T024 [P] Run `ansible-playbook -i hosts.ini playbooks/utilities/disk-health.yml` — all 6 nodes must show NVMe `PRESENT` and the new mount visible in the report
+- [X] T025 [P] Run `ansible-playbook -i hosts.ini playbooks/cluster/longhorn-smoke-test.yml` — PVC must be provisioned, data written, pod deleted and recreated, data verified persistent; confirms NVMe-backed Longhorn is fully functional
+- [X] T026 Verify Longhorn UI storage summary shows ~10TB usable (6 × 1.7TB ÷ 2 replicas) replacing the previous ~168GB from eMMC
 
 ---
 

@@ -39,11 +39,11 @@
 
 **Independent Test**: Open Grafana → Explore → select Loki → query `{namespace="argocd"}` → ArgoCD pod logs appear.
 
-- [ ] T011 [US1] Run `ansible-playbook -i hosts.ini playbooks/cluster/services-deploy.yml --tags monitoring` to deploy kube-prometheus-stack with Loki datasource update
-- [ ] T012 [US1] Run `ansible-playbook -i hosts.ini playbooks/cluster/services-deploy.yml --tags loki` to deploy Loki and verify pod is Running and PVC is Bound (quickstart.md steps 1 and 8)
-- [ ] T013 [US1] Run `ansible-playbook -i hosts.ini playbooks/cluster/services-deploy.yml --tags alloy` to deploy Alloy DaemonSet and verify 6 pods are Running (quickstart.md step 2)
-- [ ] T014 [US1] Verify Loki is receiving logs via port-forward curl to `/loki/api/v1/labels` and confirm labels include namespace and pod (quickstart.md step 3)
-- [ ] T015 [US1] Verify Grafana Loki datasource appears and queries return results for each critical namespace per quickstart.md step 5
+- [X] T011 [US1] Run `ansible-playbook -i hosts.ini playbooks/cluster/services-deploy.yml --tags monitoring` to deploy kube-prometheus-stack with Loki datasource update
+- [X] T012 [US1] Run `ansible-playbook -i hosts.ini playbooks/cluster/services-deploy.yml --tags loki` to deploy Loki and verify pod is Running and PVC is Bound (quickstart.md steps 1 and 8)
+- [X] T013 [US1] Run `ansible-playbook -i hosts.ini playbooks/cluster/services-deploy.yml --tags alloy` to deploy Alloy DaemonSet and verify 6 pods are Running (quickstart.md step 2)
+- [X] T014 [US1] Verify Loki is receiving logs via port-forward curl to `/loki/api/v1/labels` and confirm labels include namespace and pod (quickstart.md step 3)
+- [X] T015 [US1] Verify Grafana Loki datasource appears and queries return results for each critical namespace per quickstart.md step 5
 
 **Checkpoint**: Grafana Explore shows live pod logs from all namespaces — US1 complete
 
@@ -55,8 +55,8 @@
 
 **Independent Test**: Restart a pod, query its logs in Grafana — logs before and after restart both present with no gap.
 
-- [ ] T016 [US2] Verify Longhorn PVC for Loki is using `storageClass: longhorn` and is Bound by running `kubectl get pvc -n monitoring -l app.kubernetes.io/name=loki` (quickstart.md step 8)
-- [ ] T017 [US2] Perform persistence test: record a timestamp, restart `argocd-server` deployment, then query Grafana for logs from before the restart and confirm they are present (quickstart.md step 7)
+- [X] T016 [US2] Verify Longhorn PVC for Loki is using `storageClass: longhorn` and is Bound by running `kubectl get pvc -n monitoring -l app.kubernetes.io/name=loki` (quickstart.md step 8)
+- [X] T017 [US2] Perform persistence test: record a timestamp, restart `argocd-server` deployment, then query Grafana for logs from before the restart and confirm they are present (quickstart.md step 7)
 
 **Checkpoint**: Pre-restart logs confirmed present in Grafana — US2 complete
 
@@ -68,8 +68,8 @@
 
 **Independent Test**: Query `{job="systemd-journal"} |= "k3s"` in Grafana — K3s service log entries appear from all nodes.
 
-- [ ] T018 [US3] Verify journald logs appear in Grafana by querying `{job="systemd-journal"}` in Explore and confirming entries from multiple nodes are present (quickstart.md step 6)
-- [ ] T019 [US3] Confirm all 6 nodes are represented in journald logs by checking `node_name` or `hostname` label values in the query results
+- [X] T018 [US3] Verify journald logs appear in Grafana by querying `{job="systemd-journal"}` in Explore and confirming entries from multiple nodes are present (quickstart.md step 6)
+- [X] T019 [US3] Confirm all 6 nodes are represented in journald logs by checking `node_name` or `hostname` label values in the query results
 
 **Checkpoint**: System logs from all 6 nodes visible in Grafana — US3 complete
 
@@ -80,7 +80,7 @@
 - [X] T020 [P] Add `drain-shutdown` playbook timeout increase — update `roles/drain-shutdown` drain timeout from 120s to 600s to handle slow Longhorn pod termination
 - [X] T021 [P] Update `README.md` Quick Reference table to add Loki/Alloy deploy command
 - [X] T022 [P] Update `README.md` playbook directory structure to include `roles/loki/` and `roles/alloy/`
-- [ ] T023 Run full `services-deploy.yml` (no tags) and confirm idempotent — no errors, no data loss, Loki PVC intact
+- [X] T023 Run full `services-deploy.yml` (no tags) and confirm idempotent — no errors, no data loss, Loki PVC intact
 
 ---
 
