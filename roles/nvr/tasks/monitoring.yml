@@ -1,0 +1,51 @@
+---
+# spec 068: NVR host monitoring — node_exporter (metrics) + Alloy (logs)
+# Run with: ansible-playbook -i hosts.ini playbooks/nvr/nvr-provision.yml --tags monitoring
+
+# ── Grafana APT repository (required for Alloy) ──────────────────────────────
+
+- name: Add Grafana APT signing key
+  ansible.builtin.apt_key:
+    url: https://apt.grafana.com/gpg.key
+    state: present
+
+- name: Add Grafana APT repository
+  ansible.builtin.apt_repository:
+    repo: "deb https://apt.grafana.com stable main"
+    state: present
+    filename: grafana
+
+# ── Install monitoring agents ─────────────────────────────────────────────────
+
+- name: Install prometheus-node-exporter and alloy
+  ansible.builtin.apt:
+    name:
+      - prometheus-node-exporter
+      - alloy
+    state: present
+    update_cache: true
+
+# ── Alloy configuration ───────────────────────────────────────────────────────
+
+- name: Deploy Alloy config for NVR journald shipping
+  ansible.builtin.template:
+    src: alloy-nvr.config.j2
+    dest: /etc/alloy/config.alloy
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart alloy
+
+# ── Ensure services are enabled and running ───────────────────────────────────
+
+- name: Enable and start prometheus-node-exporter
+  ansible.builtin.systemd:
+    name: prometheus-node-exporter
+    enabled: true
+    state: started
+
+- name: Enable and start alloy
+  ansible.builtin.systemd:
+    name: alloy
+    enabled: true
+    state: started

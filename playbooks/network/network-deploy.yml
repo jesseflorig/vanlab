@@ -135,6 +135,26 @@
         destination_net: "10.1.10.11"
         destination_port: "22"
         description: "LAN → NVR SSH management access"
+      - seq: 206
+        action: pass
+        interface: opt2   # VLAN20_Cluster — Prometheus pods scrape from here
+        direction: in
+        ipprotocol: inet
+        protocol: TCP
+        source_net: "10.1.20.0/24"
+        destination_net: "10.1.10.11"
+        destination_port: "9100"
+        description: "Prometheus → NVR node_exporter"
+      - seq: 207
+        action: pass
+        interface: opt1   # VLAN10_Mgmt — NVR host pushes logs from here
+        direction: in
+        ipprotocol: inet
+        protocol: TCP
+        source_net: "10.1.10.11"
+        destination_net: "10.1.20.0/24"
+        destination_port: "30100"
+        description: "NVR Alloy → Loki NodePort"
     wifi_rules:
       # VLAN50 — Trusted WiFi (fleet1 SSID, 10.1.50.0/24)
       - seq: 300

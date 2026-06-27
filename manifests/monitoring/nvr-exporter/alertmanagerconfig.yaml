@@ -1,0 +1,27 @@
+---
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: nvr-ha-notify
+  namespace: monitoring
+  labels:
+    release: kube-prometheus-stack
+spec:
+  route:
+    receiver: ha-nvr-notify
+    groupWait: 30s
+    repeatInterval: 1h
+    matchers:
+      - name: alertname
+        value: NvrHostDown
+  receivers:
+    - name: ha-nvr-notify
+      webhookConfigs:
+        - url: "http://home-assistant.home-automation.svc.cluster.local:8080/api/services/notify/notify"
+          httpConfig:
+            authorization:
+              type: Bearer
+              credentials:
+                name: ha-alertmanager-token
+                key: token
+          sendResolved: true

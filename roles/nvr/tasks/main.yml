@@ -23,3 +23,7 @@
 - name: Frigate systemd service
   ansible.builtin.import_tasks: frigate-service.yml
   tags: frigate-service
+
+- name: NVR host monitoring (node_exporter + Alloy)
+  ansible.builtin.import_tasks: monitoring.yml
+  tags: monitoring

@@ -1,0 +1,21 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: nvr-host-alerts
+  namespace: monitoring
+  labels:
+    release: kube-prometheus-stack
+spec:
+  groups:
+    - name: nvr.host
+      rules:
+        - alert: NvrHostDown
+          expr: up{job="nvr-node-exporter"} == 0
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: "NVR host is unreachable"
+            description: >-
+              The NVR host at 10.1.10.11 has been unreachable for more than 2 minutes.

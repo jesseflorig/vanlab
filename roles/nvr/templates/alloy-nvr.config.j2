@@ -1,0 +1,34 @@
+// Alloy configuration for NVR host log shipping (spec 068).
+// Ships systemd journal entries to Loki via NodePort 30100.
+// Deployed by: roles/nvr/tasks/monitoring.yml
+
+loki.source.journal "nvr_journal" {
+  forward_to = [loki.write.loki_push.receiver]
+
+  relabel_rules = loki.relabel.nvr_labels.rules
+}
+
+loki.relabel "nvr_labels" {
+  forward_to = []
+
+  rule {
+    source_labels = ["__journal__systemd_unit"]
+    target_label  = "unit"
+  }
+
+  rule {
+    source_labels = ["__journal_priority_keyword"]
+    target_label  = "level"
+  }
+}
+
+loki.write "loki_push" {
+  endpoint {
+    url = "{{ nvr_loki_push_url }}"
+  }
+
+  external_labels = {
+    job  = "nvr-host",
+    host = "nvr-host",
+  }
+}

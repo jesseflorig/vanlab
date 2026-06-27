@@ -21,3 +21,8 @@
   ansible.builtin.systemd:
     name: frigate
     state: restarted
+
+- name: Restart alloy
+  ansible.builtin.systemd:
+    name: alloy
+    state: restarted

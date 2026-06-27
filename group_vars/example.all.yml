@@ -245,6 +245,25 @@ authentik_db_password: CHANGEME
 # Generate with: openssl rand -hex 24
 authentik_db_superuser_password: CHANGEME
 
+# ── NVR Host Monitoring (068-nvr-monitoring) ──────────────────────────────────
+# Used by: playbooks/utilities/seal-secrets.yml (tag: nvr-monitoring)
+#          playbooks/network/network-deploy.yml (firewall rules seq 206, 207)
+#
+# Deployment order:
+#   1. Set ha_alertmanager_token below (reuse the "ansible" long-lived HA token)
+#   2. ansible-playbook playbooks/utilities/seal-secrets.yml --tags nvr-monitoring
+#      Generates manifests/monitoring/nvr-exporter/sealed-secrets.yaml
+#   3. git add manifests/monitoring/nvr-exporter/ && git commit && git push gitea 068-nvr-monitoring
+#      ArgoCD auto-syncs the monitoring-nvr application after merge to main
+#   4. ansible-playbook -i hosts.ini playbooks/nvr/nvr-provision.yml --tags monitoring
+#      Installs prometheus-node-exporter and Alloy on the NVR host
+#
+# See specs/068-nvr-monitoring/quickstart.md for full runbook.
+
+# Home Assistant long-lived API token for Alertmanager webhook
+# Reuse the "ansible" token (expires 2036) — set real value here before sealing
+ha_alertmanager_token: <HA_ALERTMANAGER_TOKEN>
+
 # ── Authentik OIDC App Integration (064-authentik-oidc-apps) ─────────────────
 # Generate with: openssl rand -hex 32
 grafana_oidc_client_id: grafana

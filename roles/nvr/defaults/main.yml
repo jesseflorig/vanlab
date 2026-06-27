@@ -34,3 +34,7 @@ nvr_mqtt_username: "frigate-nvr"
 nvr_mqtt_password: "passwordpassword"
 nvr_mqtt_topic_prefix: "frigate"
 nvr_mqtt_client_id: "frigate-nvr"
+
+# Monitoring (spec 068)
+nvr_node_exporter_port: 9100
+nvr_loki_push_url: "http://10.1.20.11:30100/loki/api/v1/push"

@@ -1,0 +1,15 @@
+---
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: nvr-node-exporter
+  namespace: monitoring
+  labels:
+    release: kube-prometheus-stack
+spec:
+  staticConfigs:
+    - targets:
+        - "10.1.10.11:9100"
+  metricsPath: /metrics
+  scrapeInterval: 60s
+  jobName: nvr-node-exporter
